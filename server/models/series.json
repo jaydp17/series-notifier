@@ -11,11 +11,16 @@
       "String"
     ],
     "running": "Boolean",
-    "rating": "Boolean",
+    "rating": "String",
     "length": "Number",
     "fanArt": "String"
   },
   "validations": [],
-  "relations": [],
+  "relations": {
+    "users": {
+      "type": "hasAndBelongsToMany",
+      "model": "User"
+    }
+  },
   "acls": []
 }
