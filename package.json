@@ -22,6 +22,7 @@
   "devDependencies": {
     "eslint": "3.5.0",
     "eslint-config-loopback": "4.0.0",
+    "loopback-console": "0.2.2",
     "nsp": "2.6.1"
   },
   "repository": {
