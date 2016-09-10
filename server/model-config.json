@@ -12,5 +12,13 @@
       "../common/mixins",
       "./mixins"
     ]
+  },
+  "User": {
+    "dataSource": "mongo",
+    "public": false
+  },
+  "Series": {
+    "dataSource": "mongo",
+    "public": false
   }
 }

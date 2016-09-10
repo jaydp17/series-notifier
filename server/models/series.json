@@ -1,0 +1,21 @@
+{
+  "name": "Series",
+  "properties": {
+    "imdbId": "String",
+    "tvDbId": "Number",
+    "name": {
+      "type": "String",
+      "required": "true"
+    },
+    "genre": [
+      "String"
+    ],
+    "running": "Boolean",
+    "rating": "Boolean",
+    "length": "Number",
+    "fanArt": "String"
+  },
+  "validations": [],
+  "relations": [],
+  "acls": []
+}

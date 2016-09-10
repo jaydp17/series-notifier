@@ -1,0 +1,12 @@
+{
+  "name": "User",
+  "properties": {
+    "socialId": {
+      "type": "String",
+      "required": "true"
+    }
+  },
+  "validations": [],
+  "relations": [],
+  "acls": []
+}
