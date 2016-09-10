@@ -1,1 +1,10 @@
-{}
+{
+  "mongo": {
+    "url": "mongodb://ds019986.mlab.com:19986/",
+    "database": "series-notifier",
+    "password": "yPKxV3YN5DTs5mYR",
+    "name": "mongo",
+    "user": "jaydp",
+    "connector": "mongodb"
+  }
+}
