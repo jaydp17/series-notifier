@@ -25,7 +25,7 @@ boot(app, __dirname, function(err) {
   if (err) throw err;
 
   if (loopbackConsole.activated()) {
-    loopbackConsole.start(app, {prompt: "app # "});
+    loopbackConsole.start(app, {prompt: 'app # '});
   } else if (require.main === module) {
     app.start();
   }
