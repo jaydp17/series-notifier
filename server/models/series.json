@@ -1,19 +1,38 @@
 {
   "name": "Series",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
-    "imdbId": "String",
-    "tvDbId": "Number",
+    "imdbId": {
+      "type": "String"
+    },
+    "tvDbId": {
+      "type": "Number"
+    },
     "name": {
       "type": "String",
       "required": "true"
     },
-    "genre": [
-      "String"
-    ],
-    "running": "Boolean",
-    "rating": "String",
-    "length": "Number",
-    "fanArt": "String"
+    "genre": {
+      "type": [
+        "String"
+      ]
+    },
+    "running": {
+      "type": "Boolean"
+    },
+    "rating": {
+      "type": "String"
+    },
+    "length": {
+      "type": "Number"
+    },
+    "fanArt": {
+      "type": "String"
+    }
   },
   "validations": [],
   "relations": {
@@ -22,5 +41,6 @@
       "model": "User"
     }
   },
-  "acls": []
+  "acls": [],
+  "methods": {}
 }

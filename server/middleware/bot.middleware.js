@@ -31,11 +31,12 @@ bot.on('postback', (payload, reply) => {
   let data = payload.postback.payload;
   data = JSON.parse(data);
 
-  const {action, series} = data;
-  BotController.onPostBack(action, series)
-    .then(text => reply({text}, console.error));
+  const { action, series } = data;
+  const senderId = payload.sender.id;
+  BotController.onPostBack(senderId, action, series)
+    .then(text => reply({ text }, console.error));
 });
 
-module.exports = function() {
+module.exports = function () {
   return bot.middleware();
 };

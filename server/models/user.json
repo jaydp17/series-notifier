@@ -1,5 +1,10 @@
 {
   "name": "User",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
   "properties": {
     "socialId": {
       "type": "String",
@@ -13,5 +18,6 @@
       "model": "Series"
     }
   },
-  "acls": []
+  "acls": [],
+  "methods": {}
 }
