@@ -38,6 +38,11 @@
       "paths": [
         "${restApiRoot}"
       ]
+    },
+    "./middleware/bot.middleware": {
+      "paths": [
+        "/bot"
+      ]
     }
   },
   "files": {},

@@ -2,5 +2,10 @@
   "extends": "loopback",
   "parserOptions": {
     "ecmaVersion": 6
+  },
+  "rules": {
+    "camelcase": ["error", {"properties": "never"}],
+    "max-len": ["error", 100, 4, {"ignoreComments": true, "ignoreUrls": true,
+      "ignorePattern": "^\\s*var\\s.+=\\s*require\\s*\\("}]
   }
 }
