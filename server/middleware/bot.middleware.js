@@ -20,7 +20,8 @@ bot.on('message', (payload, reply) => {
   if (payload.message.is_echo) return;
   if (!text) return;
 
-  BotController.onMessage(text)
+  const senderId = payload.sender.id;
+  BotController.onMessage(senderId, text)
     .then(results => reply(results, console.error));
 });
 
@@ -34,7 +35,7 @@ bot.on('postback', (payload, reply) => {
   const { action, series } = data;
   const senderId = payload.sender.id;
   BotController.onPostBack(senderId, action, series)
-    .then(text => reply({ text }, console.error));
+    .then(result => reply(result, console.error));
 });
 
 module.exports = function () {

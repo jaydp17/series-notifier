@@ -5,19 +5,43 @@ const Promise = require('bluebird');
 const Models = require('../server').models;
 const TraktController = require('./trakt.controller');
 const MsgController = require('./msg.controller');
-const Actions = require('../constants.json').Actions;
+const Constants = require('../constants.json');
+
+const Actions = Constants.Actions;
+const ButtonTexts = Constants.ButtonTexts;
 
 class BotController {
 
   /**
    * Called when a user msgs something to the bot
+   * @param senderId The social id of the sender
    * @param text The message that the user sent
    * @returns {Promise}
    */
-  static onMessage(/*string*/ text) {
+  static onMessage(/* string */ senderId, /* string */ text) {
     return TraktController.search(text)
       .filter(series => series.running)
-      .then(seriesList => MsgController.carousel(seriesList));
+      .then(seriesList => Promise.props({
+        seriesList,
+        subscribedList: Models.User.myShows(senderId),
+      }))
+      .then((/* {seriesList, subscribedList} */ result) => {
+        const { seriesList, subscribedList } = result;
+        const actionList = new Array(seriesList.length).fill(Actions.SUBSCRIBE);
+        const buttonTextList = new Array(seriesList.length).fill(ButtonTexts.SUBSCRIBE);
+        subscribedList.forEach(series => {
+          const index = seriesList.findIndex(item => {
+            return item.tvDbId == series.tvDbId;
+          });
+
+          // mark subscribed series, & show un-subscribe button
+          if (index !== -1) {
+            actionList[index] = Actions.UN_SUBSCRIBE;
+            buttonTextList[index] = ButtonTexts.UN_SUBSCRIBE;
+          }
+        });
+        return MsgController.carousel(seriesList, actionList, buttonTextList);
+      });
   }
 
   /**
@@ -35,6 +59,9 @@ class BotController {
       case Actions.UN_SUBSCRIBE:
         return BotController.unSubscribe(senderId, series);
 
+      case Actions.MY_SHOWS:
+        return BotController.myShows(senderId);
+
       default:
         return Promise.reject('unknown action');
     }
@@ -48,7 +75,7 @@ class BotController {
    */
   static subscribe(/*string*/ senderId, /*Series*/ series) {
     return Models.User.addSubscription(senderId, series)
-      .then(() => `Subscribed to ${series.name}`);
+      .then(() => ({ text: `Subscribed to ${series.name}` }));
   }
 
   /**
@@ -58,8 +85,22 @@ class BotController {
    * @returns {Promise.<string>}
    */
   static unSubscribe(/*string*/ senderId, /*Series*/ series) {
-    return Model.user.removeSubscription(senderId, series)
-      .then(() => `Un-subscribed from ${series.name}`);
+    return Models.User.removeSubscription(senderId, series)
+      .then(() => ({ text: `Un-subscribed from ${series.name}` }));
+  }
+
+  /**
+   * Returns all the shows subscribed by a user
+   * @param socialId Social Id of the user requesting
+   * @returns {Promise}
+   */
+  static myShows(/*string*/ senderId) {
+    return Models.User.myShows(senderId)
+      .then((seriesList) => {
+        const actionList = new Array(seriesList.length).fill(Actions.UN_SUBSCRIBE);
+        const buttonTextList = new Array(seriesList.length).fill(ButtonTexts.UN_SUBSCRIBE);
+        return MsgController.carousel(seriesList, actionList, buttonTextList);
+      });
   }
 
 }

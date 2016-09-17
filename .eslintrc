@@ -7,7 +7,7 @@
     "camelcase": ["error", {"properties": "never"}],
     "max-len": ["error", 100, 4, {"ignoreComments": true, "ignoreUrls": true,
       "ignorePattern": "^\\s*var\\s.+=\\s*require\\s*\\("}],
-    "array-bracket-spacing": ["error", "always"],
+    "array-bracket-spacing": ["error", "always", {"objectsInArrays": false}],
     "object-curly-spacing": ["error", "always"],
     "space-before-function-paren": ["error", { "anonymous": "always", "named": "never" }]
   }

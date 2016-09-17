@@ -18,4 +18,15 @@ module.exports = function (User) {
       (seriesObj, userObj) => userObj.subscriptions.remove(seriesObj)
     );
   };
+
+  /**
+   * Returns all the shows subscribed by a user
+   * @param socialId Social Id of the user requesting
+   * @returns {Promise.<Series>}
+   */
+  User.myShows = (/*string*/ socialId) => {
+    return User.findOne({ where: { socialId }, include: 'subscriptions' })
+      .call('toJSON')
+      .then((/*{subscriptions}*/ result) => result.subscriptions);
+  };
 };

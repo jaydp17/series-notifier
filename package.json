@@ -19,6 +19,8 @@
     "loopback-datasource-juggler": "2.50.0",
     "messenger-bot": "2.3.0",
     "node-tvdb": "2.0.12",
+    "request": "2.74.0",
+    "request-promise": "4.1.1",
     "serve-favicon": "2.3.0",
     "strong-error-handler": "1.1.0",
     "trakt-api": "0.4.1"
