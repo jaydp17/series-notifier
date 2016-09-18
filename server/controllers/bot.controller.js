@@ -73,6 +73,22 @@ class BotController {
   }
 
   /**
+   * Called when the user clicks a quick reply
+   * @param senderId Social Id of the user (in Fb cas, the senderId)
+   * @param action Action associated with the button
+   * @returns {Promise}
+   */
+  static onQuickReply(/* string */ senderId, /* string */ action) {
+    switch (action) {
+      case Actions.I_WILL_SEARCH:
+        return BotController.searchMessage();
+
+      default:
+        return Promise.reject('unknown action');
+    }
+  }
+
+  /**
    * Gets called when the 'Get Started' button is clicked
    * @param senderId Social Id of the user (in Fb case, the senderId)
    * @returns {Promise.<{text: string, quick_replies: Array}>}
@@ -84,6 +100,16 @@ class BotController {
         'Would you like to see some trending series\' you can subscribe to?',
         quick_replies: BotConfig.quickReplies.getStarted,
       }));
+  }
+
+  /**
+   * Message to show when the user clicks "I'll search"
+   * @returns {Promise.<{text: string}>}
+   */
+  static searchMessage() {
+    return Promise.resolve({
+      text: 'Cool! Just type the name of the series & I\'ll search it for you',
+    });
   }
 
   /**

@@ -15,14 +15,22 @@ bot.on('error', err => {
   console.error('error occurred', err);
 });
 
-bot.on('message', (payload, reply) => {
-  const text = (payload.message.text || '').trim();
-  if (payload.message.is_echo) return;
-  if (!text) return;
+bot.on('message', (/*{sender, message}*/ payload, reply) => {
+  /** @type {{text, is_echo, quick_reply}} */
+  const { message } = payload;
+  const text = (message.text || '').trim();
+  if (message.is_echo || !text) return;
 
   const senderId = payload.sender.id;
-  BotController.onMessage(senderId, text)
-    .then(results => reply(results, console.error));
+
+  let result;
+  if (message.quick_reply) {
+    const quickReply = JSON.parse(message.quick_reply.payload);
+    result = BotController.onQuickReply(senderId, quickReply.action);
+  } else {
+    result = BotController.onMessage(senderId, text);
+  }
+  result.then(results => reply(results, console.error));
 });
 
 /**
