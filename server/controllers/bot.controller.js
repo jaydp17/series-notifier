@@ -6,6 +6,8 @@ const Models = require('../server').models;
 const TraktController = require('./trakt.controller');
 const MsgController = require('./msg.controller');
 const Constants = require('../constants.json');
+const ProfileController = require('./profile.controller');
+const BotConfig = require('../bot-config');
 
 const Actions = Constants.Actions;
 const ButtonTexts = Constants.ButtonTexts;
@@ -53,6 +55,9 @@ class BotController {
    */
   static onPostBack(/*string*/ senderId, /*string*/ action, /*Series*/ series) {
     switch (action) {
+      case Actions.GET_STARTED:
+        return BotController.getStarted(senderId);
+
       case Actions.SUBSCRIBE:
         return BotController.subscribe(senderId, series);
 
@@ -65,6 +70,20 @@ class BotController {
       default:
         return Promise.reject('unknown action');
     }
+  }
+
+  /**
+   * Gets called when the 'Get Started' button is clicked
+   * @param senderId Social Id of the user (in Fb case, the senderId)
+   * @returns {Promise.<{text: string, quick_replies: Array}>}
+   */
+  static getStarted(/* string */ senderId) {
+    return ProfileController.get(senderId)
+      .then(profile => ({
+        text: `Hey ${profile.first_name}!\n` +
+        'Would you like to see some trending series\' you can subscribe to?',
+        quick_replies: BotConfig.quickReplies.getStarted,
+      }));
   }
 
   /**
@@ -91,7 +110,7 @@ class BotController {
 
   /**
    * Returns all the shows subscribed by a user
-   * @param socialId Social Id of the user requesting
+   * @param senderId Social Id of the user requesting
    * @returns {Promise}
    */
   static myShows(/*string*/ senderId) {

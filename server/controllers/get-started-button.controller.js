@@ -4,8 +4,11 @@ const request = require('request-promise');
 
 const FbConstants = require('../constants.json').fb;
 
-class GreetingTextController {
-  static set(/* string */ text) {
+const { getStartedButton } = require('../bot-config');
+
+class GetStartedButtonController {
+
+  static set() {
     const options = {
       method: 'POST',
       url: `${FbConstants.GRAPH_API_URL}/me/thread_settings`,
@@ -13,8 +16,9 @@ class GreetingTextController {
         access_token: FbConstants.PAGE_TOKEN,
       },
       json: {
-        setting_type: 'greeting',
-        greeting: { text },
+        setting_type: 'call_to_actions',
+        thread_state: 'new_thread',
+        call_to_actions: [ getStartedButton ],
       },
     };
     return request(options);
@@ -28,11 +32,12 @@ class GreetingTextController {
         access_token: FbConstants.PAGE_TOKEN,
       },
       json: {
-        setting_type: 'greeting',
+        setting_type: 'call_to_actions',
+        thread_state: 'new_thread',
       },
     };
     return request(options);
   }
 }
 
-module.exports = GreetingTextController;
+module.exports = GetStartedButtonController;
