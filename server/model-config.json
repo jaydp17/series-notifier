@@ -20,5 +20,9 @@
   "Series": {
     "dataSource": "mongo",
     "public": false
+  },
+  "Trending": {
+    "dataSource": "mongo",
+    "public": false
   }
 }

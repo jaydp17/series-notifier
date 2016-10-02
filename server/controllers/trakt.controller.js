@@ -8,7 +8,6 @@ const _array = require('lodash/array');
 const trakt = require('trakt-api')(ApiKeys.TRAKT);
 
 const TvDbController = require('./tvdb.controller');
-const util = require('util');
 
 class TraktController {
 
@@ -69,27 +68,15 @@ class TraktController {
     // });
   }
 
-  // /**
-  //  * Updates the Trending Series in Db
-  //  * @return {Promise}
-  //  */
-  // static updateTrendingData() {
-  //   return TraktController._trendingShowsQuery()
-  //     .map((/*{show: {ids: {tvdb}}}*/ shows) => shows.show.ids.tvdb)
-  //     .then(tvdbIds => TvDbController.getSeriesByIds(tvdbIds))
-  //     .filter((/*Series*/ series) => series.running) // keep only running series
-  //     .then(data => SeriesDao.updateTrending(data));
-  // }
-
-  // /**
-  //  * Queries Trakt Server for trending shows
-  //  * @return {Promise}
-  //  * @private
-  //  */
-  // static _trendingShowsQuery() {
-  //   //noinspection JSUnresolvedFunction
-  //   return trakt.showTrending({limit: 20});
-  // }
+  /**
+   * Queries Trakt Server for trending shows
+   * @return {Promise}
+   * @private
+   */
+  static _trendingShowsQuery() {
+    //noinspection JSUnresolvedFunction
+    return trakt.showTrending({ limit: 10 });
+  }
 
   /**
    * Finds the next up coming season of the TvShow

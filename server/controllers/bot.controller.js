@@ -23,27 +23,39 @@ class BotController {
   static onMessage(/* string */ senderId, /* string */ text) {
     return TraktController.search(text)
       .filter(series => series.running)
-      .then(seriesList => Promise.props({
-        seriesList,
-        subscribedList: Models.User.myShows(senderId),
-      }))
-      .then((/* {seriesList, subscribedList} */ result) => {
-        const { seriesList, subscribedList } = result;
-        const actionList = new Array(seriesList.length).fill(Actions.SUBSCRIBE);
-        const buttonTextList = new Array(seriesList.length).fill(ButtonTexts.SUBSCRIBE);
-        subscribedList.forEach(series => {
-          const index = seriesList.findIndex(item => {
-            return item.tvDbId == series.tvDbId;
-          });
+      .then(seriesList => BotController.showSeriesAccToSubscription(seriesList, senderId));
+  }
 
-          // mark subscribed series, & show un-subscribe button
-          if (index !== -1) {
-            actionList[index] = Actions.UN_SUBSCRIBE;
-            buttonTextList[index] = ButtonTexts.UN_SUBSCRIBE;
-          }
+  /**
+   * Takes a list of Series and shows them in a carousel,
+   * with respect to the subscriptions that a user has.
+   * For Eg. if the list contains BBT & Suits, and let's say the user is already
+   * subscribed to  BBT, then it will show UN-SUBSCRIBE under BBT & SUBSCRIBE under Suits
+   * @param seriesList The list of series to show
+   * @param senderId The social id of the sender
+   * @returns {Promise}
+   */
+  static showSeriesAccToSubscription(/*Array<Series>*/ seriesList, /*string*/ senderId) {
+    return Promise.props({
+      seriesList,
+      subscribedList: Models.User.myShows(senderId),
+    }).then((/* {seriesList, subscribedList} */ result) => {
+      const { seriesList, subscribedList } = result;
+      const actionList = new Array(seriesList.length).fill(Actions.SUBSCRIBE);
+      const buttonTextList = new Array(seriesList.length).fill(ButtonTexts.SUBSCRIBE);
+      subscribedList.forEach(series => {
+        const index = seriesList.findIndex(item => {
+          return item.tvDbId == series.tvDbId;
         });
-        return MsgController.carousel(seriesList, actionList, buttonTextList);
+
+        // mark subscribed series, & show un-subscribe button
+        if (index !== -1) {
+          actionList[index] = Actions.UN_SUBSCRIBE;
+          buttonTextList[index] = ButtonTexts.UN_SUBSCRIBE;
+        }
       });
+      return MsgController.carousel(seriesList, actionList, buttonTextList);
+    });
   }
 
   /**
@@ -66,6 +78,9 @@ class BotController {
 
       case Actions.MY_SHOWS:
         return BotController.myShows(senderId);
+
+      case Actions.SHOW_TRENDING:
+        return BotController.showTrending(senderId);
 
       default:
         return Promise.reject('unknown action');
@@ -146,6 +161,16 @@ class BotController {
         const buttonTextList = new Array(seriesList.length).fill(ButtonTexts.UN_SUBSCRIBE);
         return MsgController.carousel(seriesList, actionList, buttonTextList);
       });
+  }
+
+  /**
+   * Returns all the Trending shows
+   * @param senderId Social Id of the user requesting
+   * @returns {Promise.<Series>}
+   */
+  static showTrending(/*string*/ senderId) {
+    return Models.Trending.get()
+      .then(seriesList => BotController.showSeriesAccToSubscription(seriesList, senderId));
   }
 
 }

@@ -10,6 +10,11 @@ module.exports = {
     payload: JSON.stringify({ action: Actions.GET_STARTED }),
   },
   persistentMenu: {
+    showTrending: {
+      type: 'postback',
+      title: ButtonTexts.SHOW_TRENDING,
+      payload: JSON.stringify({ action: Actions.SHOW_TRENDING }),
+    },
     myShows: {
       type: 'postback',
       title: ButtonTexts.MY_SHOWS,
