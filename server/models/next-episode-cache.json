@@ -1,0 +1,39 @@
+{
+  "name": "NextEpisodeCache",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "imdbId": {
+      "type": "String",
+      "required": "true"
+    },
+    "tvDbId": {
+      "type": "Number"
+    },
+    "season": {
+      "type": "Number",
+      "required": "true"
+    },
+    "number": {
+      "type": "Number",
+      "required": "true"
+    },
+    "title": {
+      "type": "String"
+    },
+    "overview": {
+      "type": "String"
+    },
+    "first_aired": {
+      "type": "Date",
+      "required": "true"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

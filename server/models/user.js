@@ -7,7 +7,10 @@ module.exports = function (User) {
       User.app.models.Series.findOrCreate({ where: { tvDbId } }, series),
       User.findOrCreate({ where: { socialId } }, { socialId }),
       ([ seriesObj ], [ userObj ]) => userObj.subscriptions.add(seriesObj)
-    );
+    ).then(() => {
+      // intentionally not returned promise
+      User.app.models.NextEpisodeCache.ensureExists(series.imdbId);
+    });
   };
 
   User.removeSubscription = (/*string*/ socialId, /*Series*/ series) => {
