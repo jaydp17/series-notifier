@@ -4,9 +4,9 @@ services:
   server:
     build: .
     ports:
-      - '${PORT}:${PORT}'
+      - 3000:3000
     environment:
-      PORT: ${PORT}
+      PORT: 3000
 
   cron:
     build:
@@ -16,3 +16,15 @@ services:
       - server
     environment:
       CRON: 1
+
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile-nginx
+    depends_on:
+      - server
+    volumes:
+      - /etc/letsencrypt:/etc/letsencrypt
+    ports:
+      - 80:80
+      - 443:443
