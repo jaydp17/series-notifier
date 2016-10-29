@@ -103,9 +103,9 @@ class TraktController {
         if (season.first_aired) {
           season.first_aired = new Date(season.first_aired);
           if (season.first_aired.getTime() - (now.getTime()) > 0) // is first_aired date in future
-            return {number: season.number, first_aired: season.first_aired};
-          return {number: season.number + 1}; // if it's in past that means the next season info hasn't been added yet
-        } else return {number: season.number};
+            return { number: season.number, first_aired: season.first_aired };
+          return { number: season.number + 1 }; // if it's in past that means the next season info hasn't been added yet
+        } else return { number: season.number };
       });
   }
 
@@ -133,7 +133,7 @@ class TraktController {
    */
   static _getShowSeasons(/*string*/ imdbId, /*string*/ extendedString) {
     //noinspection JSUnresolvedFunction
-    return trakt.showSeasons(imdbId, {extended: extendedString});
+    return trakt.showSeasons(imdbId, { extended: extendedString });
   }
 
   /**

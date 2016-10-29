@@ -50,5 +50,4 @@
  * } TraktSeason
  */
 
-module.exports = {
-};
+module.exports = {};
