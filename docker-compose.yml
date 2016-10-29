@@ -23,8 +23,6 @@ services:
       dockerfile: Dockerfile-nginx
     depends_on:
       - server
-    volumes:
-      - /etc/letsencrypt:/etc/letsencrypt
     ports:
       - 80:80
       - 443:443
