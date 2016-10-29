@@ -1,0 +1,18 @@
+version: '2'
+services:
+
+  server:
+    build: .
+    ports:
+      - '${PORT}:${PORT}'
+    environment:
+      PORT: ${PORT}
+
+  cron:
+    build:
+      context: .
+      dockerfile: Dockerfile-cron
+    depends_on:
+      - server
+    environment:
+      CRON: 1
