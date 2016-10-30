@@ -43,7 +43,7 @@ bot.on('postback', (payload, reply) => {
   const { action, series } = data;
   const senderId = payload.sender.id;
   BotController.onPostBack(senderId, action, series)
-    .then(result => reply(result, console.error));
+    .then(result => reply(result, console.log));
 });
 
 module.exports = function () {

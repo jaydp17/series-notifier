@@ -1,5 +1,7 @@
 'use strict';
 
+process.env.CRON = 1;
+
 const Promise = require('bluebird');
 const app = require('../server/server');
 const FbMsgSendController = require('../server/controllers/fb-msg-send.controller');
@@ -37,7 +39,7 @@ function processEpisode(episode) {
     findSeries(episode.imdbId),
     (users, series) => {
       return Promise.map(users, (user) => dispatchNotif(user, series, episode));
-    }).then(() => Models.NextEpisodeCache.updateSeries(episode.imdbId));
+    });
 }
 
 /**
@@ -59,9 +61,10 @@ Models.NextEpisodeCache.find({
     first_aired: {
       between: [
         now - (5 * MINUTE),
-        now + (40 * MINUTE),
+        now + (10 * MINUTE),
       ],
     },
   },
 }).map(processEpisode)
-  .then(console.log).catch(console.error);
+  .then(console.log).catch(console.error)
+  .then(() => process.exit(0));

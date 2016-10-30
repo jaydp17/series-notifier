@@ -1,7 +1,7 @@
 'use strict';
 
-const TraktController = require('../controllers/trakt.controller');
 const TvDbController = require('../controllers/tvdb.controller');
+const TraktApi = require('../controllers/trakt.api');
 
 module.exports = function (Trending) {
   /**
@@ -23,11 +23,17 @@ module.exports = function (Trending) {
    * @return {Promise}
    */
   Trending.updateTrendingData = function () {
-    return TraktController._trendingShowsQuery()
+    return TraktApi.showTrending()
       .map((/*{show: {ids: {tvdb}}}*/ shows) => shows.show.ids.tvdb)
       .then(tvdbIds => TvDbController.getSeriesByIds(tvdbIds))
       .filter((/*Series*/ series) => series.running) // keep only running series
-      .then(data => Trending.create(data));
+      .map(data => {
+        data.createdAt = new Date();
+        return data;
+      })
+      .then(data => {
+        return Trending.create(data);
+      });
   };
 };
 

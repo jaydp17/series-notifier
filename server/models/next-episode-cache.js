@@ -16,6 +16,7 @@ module.exports = function (NextEpisodeCache) {
     return TraktController.getNextEpisode(imdbId)
       .tap((/* TraktEpisode */ episode) => episode.imdbId = imdbId)
       .tap(() => NextEpisodeCache.destroyAll({ imdbId }))
-      .then((/* TraktEpisode */ episode) => NextEpisodeCache.create(episode));
+      .then((/* TraktEpisode */ episode) => NextEpisodeCache.create(episode))
+      .catch(err => console.error(err)); // called when there's no next episode
   };
 };

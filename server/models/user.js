@@ -29,7 +29,9 @@ module.exports = function (User) {
    */
   User.myShows = (/*string*/ socialId) => {
     return User.findOne({ where: { socialId }, include: 'subscriptions' })
-      .call('toJSON')
-      .then((/*{subscriptions}*/ result) => result.subscriptions);
+      .then((/*{subscriptions}*/ result) => {
+        if (!result) return [];
+        return result.subscriptions();
+      });
   };
 };

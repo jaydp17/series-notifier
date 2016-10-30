@@ -157,6 +157,9 @@ class BotController {
   static myShows(/*string*/ senderId) {
     return Models.User.myShows(senderId)
       .then((seriesList) => {
+        if (seriesList.length === 0) {
+          return { text: 'Sorry, you haven\'t subscribed to any shows yet' };
+        }
         const actionList = new Array(seriesList.length).fill(Actions.UN_SUBSCRIBE);
         const buttonTextList = new Array(seriesList.length).fill(ButtonTexts.UN_SUBSCRIBE);
         return MsgController.carousel(seriesList, actionList, buttonTextList);

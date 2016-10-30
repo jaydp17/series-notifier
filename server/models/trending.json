@@ -32,6 +32,12 @@
     },
     "fanArt": {
       "type": "String"
+    },
+    "createdAt": {
+      "type": "Date",
+      "index": {
+        "expireAfterSeconds": 43200
+      }
     }
   },
   "validations": [],
