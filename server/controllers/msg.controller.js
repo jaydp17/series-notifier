@@ -1,6 +1,8 @@
 'use strict';
 
-const Actions = require('../constants.json').Actions;
+const constants = require('../constants.json');
+const Actions = constants.Actions;
+const ButtonTexts = constants.ButtonTexts;
 
 class MsgController {
 
@@ -25,7 +27,11 @@ class MsgController {
 
     const elements = result.attachment.payload.elements;
     seriesList.forEach((series, i) => {
-      const card = MsgController.carouselElement(series, actionList[i], buttonTextList[i]);
+      const card = MsgController.carouselElement(
+        series,
+        [ Actions.NEXT_EP_DATE, actionList[i] ],
+        [ ButtonTexts.NEXT_EP_DATE, buttonTextList[i] ]
+      );
       elements.push(card);
     });
 
@@ -35,22 +41,27 @@ class MsgController {
   /**
    * Returns a carousel element configuration
    * @param series The series that has to be in the element
-   * @param action The action to take when the button is clicked
-   * @param buttonText The text that should appear on the buttons
+   * @param actions A list of actions to take when the button is clicked
+   * @param buttonTexts A list of texts that should appear on the buttons
    * @returns {{}}
    */
-  static carouselElement(/* Series */ series, /* string */ action, /* string */ buttonText) {
-    const payload = { action, series };
-    return {
+  static carouselElement(/* Series */ series, /* Array<string> */ actions,
+                         /* Array<string> */ buttonTexts) {
+    const options = {
       title: series.name,
       subtitle: series.genre.join(', '),
       image_url: series.fanArt,
-      buttons: [{
-        type: 'postback',
-        title: buttonText,
-        payload: JSON.stringify(payload),
-      }],
+      buttons: [],
     };
+    for (let i = 0; i < actions.length; i++) {
+      const button = {
+        type: 'postback',
+        title: buttonTexts[i],
+        payload: JSON.stringify({ action: actions[i], series }),
+      };
+      options.buttons.push(button);
+    }
+    return options;
   }
 
 }

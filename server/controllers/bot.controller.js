@@ -1,6 +1,7 @@
 'use strict';
 
 const Promise = require('bluebird');
+const moment = require('moment');
 
 const Models = require('../server').models;
 const TraktController = require('./trakt.controller');
@@ -81,6 +82,9 @@ class BotController {
 
       case Actions.SHOW_TRENDING:
         return BotController.showTrending(senderId);
+
+      case Actions.NEXT_EP_DATE:
+        return BotController.nextEpisodeDate(series);
 
       default:
         return Promise.reject('unknown action');
@@ -174,6 +178,25 @@ class BotController {
   static showTrending(/*string*/ senderId) {
     return Models.Trending.get()
       .then(seriesList => BotController.showSeriesAccToSubscription(seriesList, senderId));
+  }
+
+  static nextEpisodeDate(/*Series*/ series) {
+    // eslint-disable-next-line max-len
+    const unknownEpMsg = { text: `Sorry, I don't know the exact release date of ${series.name}'s next episode.` };
+    return TraktController.getNextEpisode(series.imdbId)
+      .then((nextEp) => {
+        if (!nextEp) return unknownEpMsg;
+        const epNumber = ('00' + nextEp.number).slice(-2);
+        const seriesNumber = ('00' + nextEp.season).slice(-2);
+        const timeDiff = moment(nextEp.first_aired).fromNow();
+        return {
+          text: `S${seriesNumber}E${epNumber} of ${series.name} goes live ${timeDiff}`,
+        };
+      })
+      .catch(() => {
+        console.error('unknown next episode:', series.imdbId);
+        return unknownEpMsg;
+      });
   }
 
 }
