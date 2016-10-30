@@ -5,6 +5,14 @@
   "options": {
     "validateUpsert": true
   },
+  "indexes": {
+    "keys": {
+      "imdbId": 1
+    },
+    "options": {
+      "unique": true
+    }
+  },
   "properties": {
     "imdbId": {
       "type": "String"
