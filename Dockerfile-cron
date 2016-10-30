@@ -10,6 +10,8 @@ RUN npm i -g yarn
 
 COPY package.json yarn.lock /src/
 
+ADD .yarn-cache.tgz /
+
 RUN yarn
 
 COPY . /src
