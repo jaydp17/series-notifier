@@ -1,6 +1,7 @@
 {
   "name": "fb-series-notifier",
   "version": "1.0.0",
+  "description": "A Messenger bot that notifies you when the next episode of your favorite series goes live",
   "main": "server/server.js",
   "scripts": {
     "lint": "eslint .",
@@ -43,9 +44,14 @@
     "nsp": "2.6.1"
   },
   "repository": {
-    "type": "",
-    "url": ""
+    "type": "git",
+    "url": "git+ssh://git@gitlab.com/jaydp17/series-notifier-fb-bot.git"
   },
+  "author": "Jaydeep Solanki <jaydp17@gmail.com> (https://jaydp.com)",
   "license": "UNLICENSED",
-  "description": "fb-series-notifier"
+  "private": true,
+  "bugs": {
+    "url": "https://gitlab.com/jaydp17/series-notifier-fb-bot/issues"
+  },
+  "homepage": "https://gitlab.com/jaydp17/series-notifier-fb-bot#README"
 }
