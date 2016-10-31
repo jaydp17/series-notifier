@@ -2,7 +2,7 @@
 
 process.env.CRON = 1;
 
-const app = require('../server/server');
+const app = require('../server');
 const Models = app.models;
 
 // stores all the unique imdbIds people have already subscribed to

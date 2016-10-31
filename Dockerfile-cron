@@ -16,6 +16,6 @@ RUN yarn
 
 COPY . /src
 
-COPY cron/crontab /var/spool/cron/crontabs/root
+COPY server/cron/crontab /var/spool/cron/crontabs/root
 
 CMD crond -l 2 -f

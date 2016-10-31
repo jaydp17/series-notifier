@@ -3,8 +3,8 @@
 process.env.CRON = 1;
 
 const Promise = require('bluebird');
-const app = require('../server/server');
-const FbMsgSendController = require('../server/controllers/fb-msg-send.controller');
+const app = require('../server');
+const FbMsgSendController = require('../controllers/fb-msg-send.controller');
 const Models = app.models;
 
 const now = Date.now();

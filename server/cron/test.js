@@ -1,4 +1,4 @@
 'use strict';
 
-require('../server/server');
+require('../server');
 console.log('hi from node.js');
