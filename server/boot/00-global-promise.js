@@ -1,5 +1,5 @@
-'use strict';
+import Promise from 'bluebird';
 
-module.exports = (app) => {
-  global.Promise = require('bluebird');
-};
+export default function () {
+  global.Promise = Promise;
+}

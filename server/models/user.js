@@ -1,7 +1,5 @@
-'use strict';
-
-module.exports = function (User) {
-  User.addSubscription = (/*string*/ socialId, /*Series*/ series) => {
+export default function (User) {
+  User.addSubscription = function (/* string */ socialId, /* Series */ series) {
     const { tvDbId } = series;
     return Promise.join(
       User.app.models.Series.findOrCreate({ where: { tvDbId } }, series),
@@ -13,7 +11,7 @@ module.exports = function (User) {
     });
   };
 
-  User.removeSubscription = (/*string*/ socialId, /*Series*/ series) => {
+  User.removeSubscription = function (/* string */ socialId, /* Series */ series) {
     const { tvDbId } = series;
     return Promise.join(
       User.app.models.Series.findOne({ where: { tvDbId } }),
@@ -27,11 +25,11 @@ module.exports = function (User) {
    * @param socialId Social Id of the user requesting
    * @returns {Promise.<Series>}
    */
-  User.myShows = (/*string*/ socialId) => {
+  User.myShows = function (socialId) {
     return User.findOne({ where: { socialId }, include: 'subscriptions' })
-      .then((/*{subscriptions}*/ result) => {
+      .then((/* {subscriptions} */ result) => {
         if (!result) return [];
         return result.subscriptions();
       });
   };
-};
+}

@@ -1,6 +1,5 @@
-'use strict';
+import request from 'request-promise';
 
-const request = require('request-promise');
 const apiKey = require('../constants.json').ApiKeys.TRAKT;
 
 const BASE_URL = 'https://api.trakt.tv';
@@ -8,9 +7,9 @@ const HEADERS = {
   'trakt-api-version': '2',
   'trakt-api-key': apiKey,
 };
-const fireRequest = (options) => request(options).promise();
+const fireRequest = options => request(options).promise();
 
-class TraktApi {
+export default class TraktApi {
 
   /**
    * Searches the query on Trakt.tv server and returns the raw response
@@ -82,5 +81,3 @@ class TraktApi {
   }
 
 }
-
-module.exports = TraktApi;

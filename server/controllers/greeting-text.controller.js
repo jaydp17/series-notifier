@@ -1,10 +1,8 @@
-'use strict';
-
-const request = require('request-promise');
+import request from 'request-promise';
 
 const FbConstants = require('../constants.json').fb;
 
-class GreetingTextController {
+export default class GreetingTextController {
   static set(/* string */ text) {
     const options = {
       method: 'POST',
@@ -34,5 +32,3 @@ class GreetingTextController {
     return request(options);
   }
 }
-
-module.exports = GreetingTextController;

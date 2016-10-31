@@ -4,14 +4,11 @@
     "node": true
   },
   "parserOptions": {
-    "ecmaVersion": 6,
-    "sourceType": "script",
-    "ecmaFeatures": {
-      "modules": false
-    }
+    "ecmaVersion": 6
   },
   "rules": {
     "max-len": ["off"],
+    "func-names": ["off"],
     "import/no-dynamic-require": ["off"],
     "no-plusplus": ["error", { "allowForLoopAfterthoughts": true }],
     "no-param-reassign": ["error", { "props": false }],

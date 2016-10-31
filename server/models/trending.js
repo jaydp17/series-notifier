@@ -1,16 +1,14 @@
-'use strict';
+import TvDbController from '../controllers/tvdb.controller';
+import TraktApi from '../controllers/trakt.api';
 
-const TvDbController = require('../controllers/tvdb.controller');
-const TraktApi = require('../controllers/trakt.api');
-
-module.exports = function (Trending) {
+export default function (Trending) {
   /**
    * Gets the trending series data from the cache (if exists) or from TraktTV
-   * @returns {Promise.<TResult>}
+   * @returns {Promise}
    */
   Trending.get = function () {
     return Trending.find()
-      .then((/*Array*/ trending) => {
+      .then((/* Array */ trending) => {
         if (!trending.length) {
           return Trending.updateTrendingData();
         }
@@ -24,16 +22,15 @@ module.exports = function (Trending) {
    */
   Trending.updateTrendingData = function () {
     return TraktApi.showTrending()
-      .map((/*{show: {ids: {tvdb}}}*/ shows) => shows.show.ids.tvdb)
+      .map(shows => shows.show.ids.tvdb)
       .then(tvdbIds => TvDbController.getSeriesByIds(tvdbIds))
-      .filter((/*Series*/ series) => series.running) // keep only running series
-      .map(data => {
+      .filter(series => series.running) // keep only running series
+      .map((data) => {
         data.createdAt = new Date();
         return data;
       })
-      .then(data => {
-        return Trending.create(data);
-      });
+      .then(data =>
+         Trending.create(data)
+      );
   };
-};
-
+}

@@ -1,19 +1,19 @@
-'use strict';
+import Promise from 'bluebird';
+import moment from 'moment';
 
-const Promise = require('bluebird');
-const moment = require('moment');
+import { models as Models } from '../server';
+import TraktController from './trakt.controller';
+import MsgController from './msg.controller';
+import ProfileController from './profile.controller';
+import BotConfig from '../bot-config';
 
-const Models = require('../server').models;
-const TraktController = require('./trakt.controller');
-const MsgController = require('./msg.controller');
+// coz es6 module import/export don't load json files
 const Constants = require('../constants.json');
-const ProfileController = require('./profile.controller');
-const BotConfig = require('../bot-config');
 
 const Actions = Constants.Actions;
 const ButtonTexts = Constants.ButtonTexts;
 
-class BotController {
+export default class BotController {
 
   /**
    * Called when a user msgs something to the bot
@@ -36,18 +36,16 @@ class BotController {
    * @param senderId The social id of the sender
    * @returns {Promise}
    */
-  static showSeriesAccToSubscription(/*Array<Series>*/ seriesList, /*string*/ senderId) {
+  static showSeriesAccToSubscription(/* Array<Series> */ seriesList, /* string */ senderId) {
     return Promise.props({
       seriesList,
       subscribedList: Models.User.myShows(senderId),
     }).then((/* {seriesList, subscribedList} */ result) => {
-      const { seriesList, subscribedList } = result;
+      const { seriesList, subscribedList } = result; // eslint-disable-line no-shadow
       const actionList = new Array(seriesList.length).fill(Actions.SUBSCRIBE);
       const buttonTextList = new Array(seriesList.length).fill(ButtonTexts.SUBSCRIBE);
-      subscribedList.forEach(series => {
-        const index = seriesList.findIndex(item => {
-          return item.tvDbId == series.tvDbId;
-        });
+      subscribedList.forEach((series) => {
+        const index = seriesList.findIndex(item => item.tvDbId === series.tvDbId);
 
         // mark subscribed series, & show un-subscribe button
         if (index !== -1) {
@@ -66,7 +64,7 @@ class BotController {
    * @param series The series on which the action was performed
    * @returns {Promise}
    */
-  static onPostBack(/*string*/ senderId, /*string*/ action, /*Series*/ series) {
+  static onPostBack(/* string */ senderId, /* string */ action, /* Series */ series) {
     switch (action) {
       case Actions.GET_STARTED:
         return BotController.getStarted(senderId);
@@ -137,7 +135,7 @@ class BotController {
    * @param series The series to subscribe
    * @returns {Promise.<string>}
    */
-  static subscribe(/*string*/ senderId, /*Series*/ series) {
+  static subscribe(/* string */ senderId, /* Series */ series) {
     return Models.User.addSubscription(senderId, series)
       .then(() => ({ text: `Subscribed to ${series.name}` }));
   }
@@ -148,7 +146,7 @@ class BotController {
    * @param series The series to un-subscribe from
    * @returns {Promise.<string>}
    */
-  static unSubscribe(/*string*/ senderId, /*Series*/ series) {
+  static unSubscribe(/* string */ senderId, /* Series */ series) {
     return Models.User.removeSubscription(senderId, series)
       .then(() => ({ text: `Un-subscribed from ${series.name}` }));
   }
@@ -158,7 +156,7 @@ class BotController {
    * @param senderId Social Id of the user requesting
    * @returns {Promise}
    */
-  static myShows(/*string*/ senderId) {
+  static myShows(/* string */ senderId) {
     return Models.User.myShows(senderId)
       .then((seriesList) => {
         if (seriesList.length === 0) {
@@ -175,30 +173,28 @@ class BotController {
    * @param senderId Social Id of the user requesting
    * @returns {Promise.<Series>}
    */
-  static showTrending(/*string*/ senderId) {
+  static showTrending(/* string */ senderId) {
     return Models.Trending.get()
       .then(seriesList => BotController.showSeriesAccToSubscription(seriesList, senderId));
   }
 
-  static nextEpisodeDate(/*Series*/ series) {
+  static nextEpisodeDate(/* Series */ series) {
     // eslint-disable-next-line max-len
     const unknownEpMsg = { text: `Sorry, I don't know the exact release date of ${series.name}'s next episode.` };
     return TraktController.getNextEpisode(series.imdbId)
       .then((nextEp) => {
         if (!nextEp) return unknownEpMsg;
-        const epNumber = ('00' + nextEp.number).slice(-2);
-        const seriesNumber = ('00' + nextEp.season).slice(-2);
+        const epNumber = (`00${nextEp.number}`).slice(-2);
+        const seriesNumber = (`00${nextEp.season}`).slice(-2);
         const timeDiff = moment(nextEp.first_aired).fromNow();
         return {
           text: `S${seriesNumber}E${epNumber} of ${series.name} goes live ${timeDiff}`,
         };
       })
       .catch(() => {
-        console.error('unknown next episode:', series.imdbId);
+        console.error('unknown next episode:', series.imdbId); // eslint-disable-line no-console
         return unknownEpMsg;
       });
   }
 
 }
-
-module.exports = BotController;

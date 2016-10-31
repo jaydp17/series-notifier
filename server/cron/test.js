@@ -1,4 +1,3 @@
-'use strict';
-
 require('../server');
-console.log('hi from node.js');
+
+console.log('hi from node.js'); // eslint-disable-line no-console

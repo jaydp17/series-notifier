@@ -1,10 +1,8 @@
-'use strict';
-
-const request = require('request-promise');
+import request from 'request-promise';
 
 const FbConstants = require('../constants.json').fb;
 
-class ProfileController {
+export default class ProfileController {
 
   /**
    * Gets the profile of the sender
@@ -24,5 +22,3 @@ class ProfileController {
   }
 
 }
-
-module.exports = ProfileController;

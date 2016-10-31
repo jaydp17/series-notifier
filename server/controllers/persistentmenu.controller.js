@@ -1,12 +1,10 @@
-'use strict';
-
-const request = require('request-promise');
+import request from 'request-promise';
 
 const FbConstants = require('../constants.json').fb;
 
-class PersistentMenu {
+export default class PersistentMenu {
 
-  static set(/*Array<{type, title, payload}>*/ buttons) {
+  static set(/* Array<{type, title, payload}> */ buttons) {
     const options = {
       method: 'POST',
       url: 'https://graph.facebook.com/v2.6/me/thread_settings',
@@ -38,5 +36,3 @@ class PersistentMenu {
   }
 
 }
-
-module.exports = PersistentMenu;

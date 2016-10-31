@@ -1,10 +1,9 @@
-'use strict';
-
 const constants = require('../constants.json');
+
 const Actions = constants.Actions;
 const ButtonTexts = constants.ButtonTexts;
 
-class MsgController {
+export default class MsgController {
 
   /**
    * Returns a carousel config that the bot can reply
@@ -65,5 +64,3 @@ class MsgController {
   }
 
 }
-
-module.exports = MsgController;

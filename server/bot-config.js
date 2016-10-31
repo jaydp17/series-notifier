@@ -1,10 +1,9 @@
-'use strict';
-
 const Constants = require('./constants.json');
+
 const Actions = Constants.Actions;
 const ButtonTexts = Constants.ButtonTexts;
 
-module.exports = {
+export default {
   greetingText: 'This bot notifies you when the next episode of your favorite Tv Series airs',
   getStartedButton: {
     payload: JSON.stringify({ action: Actions.GET_STARTED }),

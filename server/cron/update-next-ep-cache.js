@@ -1,9 +1,4 @@
-'use strict';
-
-process.env.CRON = 1;
-
-const app = require('../server');
-const Models = app.models;
+import { models as Models } from '../server';
 
 // stores all the unique imdbIds people have already subscribed to
 const ImdbIds = new Set();
@@ -18,12 +13,13 @@ Models.User.find({
     },
   },
 }).map(d => d.subscriptions())
-  .map(d => {
+  .map((d) => {
     d.forEach(ep => ImdbIds.add(ep.imdbId));
+    return undefined;
   })
   .then(() => [ ...ImdbIds ])
   .map(imdbId => Models.NextEpisodeCache.updateSeries(imdbId))
-  .then(console.log)
-  .then(() => console.log('done'))
+  .then(console.log) // eslint-disable-line no-console
+  .then(() => console.log('done')) // eslint-disable-line no-console
   .then(() => process.exit(0));
 

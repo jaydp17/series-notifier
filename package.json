@@ -4,7 +4,7 @@
   "main": "server/server.js",
   "scripts": {
     "lint": "eslint .",
-    "start": "node .",
+    "start": "node build/server/server.js",
     "posttest": "npm run lint && nsp check",
     "build": "babel server -d build/server --copy-files"
   },
@@ -17,10 +17,12 @@
     "compression": "1.6.2",
     "cors": "2.8.1",
     "helmet": "2.1.3",
+    "lodash": "4.16.5",
     "loopback": "2.33.0",
     "loopback-boot": "2.22.0",
     "loopback-component-explorer": "2.6.0",
     "loopback-connector-mongodb": "1.15.2",
+    "loopback-console": "0.2.2",
     "loopback-datasource-juggler": "2.50.0",
     "messenger-bot": "2.3.0",
     "moment": "2.15.2",
@@ -32,12 +34,12 @@
   },
   "devDependencies": {
     "babel-cli": "6.18.0",
+    "babel-plugin-add-module-exports": "0.2.1",
     "babel-preset-env": "0.0.6",
     "babel-preset-es2015": "6.18.0",
     "eslint": "3.9.0",
     "eslint-config-airbnb": "12.0.0",
     "eslint-plugin-import": "2.0.1",
-    "loopback-console": "0.2.2",
     "nsp": "2.6.1"
   },
   "repository": {

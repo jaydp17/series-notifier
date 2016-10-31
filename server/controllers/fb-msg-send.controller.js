@@ -1,9 +1,8 @@
-'use strict';
+import request from 'request-promise';
 
-const request = require('request-promise');
 const FbConstants = require('../constants.json').fb;
 
-class FbMsgSendController {
+export default class FbMsgSendController {
 
   static send(/* string */ senderId, message) {
     const options = {
@@ -20,5 +19,3 @@ class FbMsgSendController {
     return request(options);
   }
 }
-
-module.exports = FbMsgSendController;

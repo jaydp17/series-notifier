@@ -1,12 +1,9 @@
-'use strict';
-
-const request = require('request-promise');
+import request from 'request-promise';
+import { getStartedButton } from '../bot-config';
 
 const FbConstants = require('../constants.json').fb;
 
-const { getStartedButton } = require('../bot-config');
-
-class GetStartedButtonController {
+export default class GetStartedButtonController {
 
   static set() {
     const options = {
@@ -39,5 +36,3 @@ class GetStartedButtonController {
     return request(options);
   }
 }
-
-module.exports = GetStartedButtonController;

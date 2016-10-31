@@ -1,24 +1,22 @@
-'use strict';
+import Promise from 'bluebird';
+import _object from 'lodash/object';
+import _array from 'lodash/array';
+import TraktApi from './trakt.api';
 
-const Promise = require('bluebird');
-const _object = require('lodash/object');
-const _array = require('lodash/array');
-const TraktApi = require('./trakt.api');
+import TvDbController from './tvdb.controller';
 
-const TvDbController = require('./tvdb.controller');
-
-class TraktController {
+export default class TraktController {
 
   /**
    * Searches Tv Shows based on the query provided
    * @param query A piece of text that is matched against the title of the Tv Show
    * @return {Promise<Array<Series>>}
    */
-  static search(/*string*/ query) {
+  static search(/* string */ query) {
     return TraktApi.searchShow(query)
-      .map((/*{show}*/ result) => result.show)
-      .filter((/*{title, year, status}*/ show) => show.title && show.year && show.status)
-      .map((/*{ids: {tvdb}}*/ show) => show.ids.tvdb)
+      .map(result => result.show)
+      .filter(show => show.title && show.year && show.status)
+      .map(show => show.ids.tvdb)
       .filter(id => id) // remove null/undefined ids
       .then(ids => _array.uniq(ids)) // make them unique
       .then(TvDbController.getSeriesByIds)
@@ -30,7 +28,7 @@ class TraktController {
    * @param imdbId IMDB ID of the Tv Show
    * @return {Promise<TraktEpisode>}
    */
-  static getNextEpisode(/*string*/ imdbId) {
+  static getNextEpisode(/* string */ imdbId) {
     return TraktApi.nextEpisode(imdbId)
       .then((episode) => {
         if (!episode) return Promise.reject('next episode unknown');
@@ -38,7 +36,7 @@ class TraktController {
       })
       .then(TraktController._keepOnlyRequiredFields)
       .then(TraktController._correctEmptyFields)
-      .then(episode => {
+      .then((episode) => {
         TraktController._convertAirDate(episode);
         return episode;
       });
@@ -52,8 +50,7 @@ class TraktController {
    */
   static _keepOnlyRequiredFields(episode) {
     if (!episode) return episode;
-    episode = _object.pick(episode, ['season', 'number', 'title', 'overview', 'first_aired']);
-    return episode;
+    return _object.pick(episode, [ 'season', 'number', 'title', 'overview', 'first_aired' ]);
   }
 
   /**
@@ -62,7 +59,7 @@ class TraktController {
    * @return {TraktEpisode}
    * @private
    */
-  static _correctEmptyFields(/*TraktEpisode*/ episode) {
+  static _correctEmptyFields(/* TraktEpisode */ episode) {
     if (!episode) return episode;
     episode.title = episode.title ? episode.title : `Episode ${episode.number}`;
     return episode;
@@ -73,10 +70,8 @@ class TraktController {
    * @param season Season Object
    * @return {undefined}
    */
-  static _convertAirDate(/*{first_aired}*/ season) {
+  static _convertAirDate(/* {first_aired} */ season) {
     season.first_aired = (season.first_aired) ? new Date(season.first_aired) : null;
   }
 
 }
-
-module.exports = TraktController;

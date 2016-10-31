@@ -1,9 +1,7 @@
-'use strict';
+import GetStartedButtonController from '../controllers/get-started-button.controller';
 
-const GetStartedButtonController = require('../controllers/get-started-button.controller');
-
-module.exports = () => {
-  if (process.env.CRON) return;
+export default function () {
+  if (process.env.CRON) return Promise.resolve();
   return GetStartedButtonController.set()
-    .then(console.log).catch(console.error);
-};
+    .then(console.log).catch(console.error); // eslint-disable-line no-console
+}
