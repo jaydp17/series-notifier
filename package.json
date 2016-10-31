@@ -53,5 +53,6 @@
   "bugs": {
     "url": "https://gitlab.com/jaydp17/series-notifier-fb-bot/issues"
   },
-  "homepage": "https://gitlab.com/jaydp17/series-notifier-fb-bot#README"
+  "homepage": "https://gitlab.com/jaydp17/series-notifier-fb-bot#README",
+  "keywords": []
 }
