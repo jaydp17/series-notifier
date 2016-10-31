@@ -1,5 +1,5 @@
 # runs every 15 mins
-*/15  * * * * CRON=1 node /src/server/cron/dispatch-notif.js
+*/15  * * * * CRON=1 node /src/build/server/cron/dispatch-notif.js
 
 # runs every 12 hours
-0 1,13  * * * CRON=1 node /src/server/cron/update-next-ep-cache.js
+0 1,13  * * * CRON=1 node /src/build/server/cron/update-next-ep-cache.js
