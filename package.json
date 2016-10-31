@@ -5,7 +5,12 @@
   "scripts": {
     "lint": "eslint .",
     "start": "node .",
-    "posttest": "npm run lint && nsp check"
+    "posttest": "npm run lint && nsp check",
+    "build": "babel server -d build/server --copy-files"
+  },
+  "engineStrict": true,
+  "engines": {
+    "node": "7.0.0"
   },
   "dependencies": {
     "bluebird": "3.4.6",
@@ -26,8 +31,12 @@
     "strong-error-handler": "1.1.0"
   },
   "devDependencies": {
-    "eslint": "3.5.0",
-    "eslint-config-loopback": "4.0.0",
+    "babel-cli": "6.18.0",
+    "babel-preset-env": "0.0.6",
+    "babel-preset-es2015": "6.18.0",
+    "eslint": "3.9.0",
+    "eslint-config-airbnb": "12.0.0",
+    "eslint-plugin-import": "2.0.1",
     "loopback-console": "0.2.2",
     "nsp": "2.6.1"
   },
