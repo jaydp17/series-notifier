@@ -1,9 +1,11 @@
+// @flow
+
 import request from 'request-promise';
 
 const FbConstants = require('../constants.json').fb;
 
 export default class GreetingTextController {
-  static set(/* string */ text) {
+  static set(text: string) {
     const options = {
       method: 'POST',
       url: `${FbConstants.GRAPH_API_URL}/me/thread_settings`,

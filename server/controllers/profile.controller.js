@@ -1,6 +1,18 @@
+// @flow
+
+import Promise from 'bluebird';
 import request from 'request-promise';
 
 const FbConstants = require('../constants.json').fb;
+
+export type Profile = {
+  first_name: string,
+  last_name: string,
+  profile_pic: string,
+  locale: string,
+  timezone: string,
+  gender: string,
+};
 
 export default class ProfileController {
 
@@ -9,7 +21,7 @@ export default class ProfileController {
    * @param fbSenderId
    * @returns {Promise.<{first_name, last_name, profile_pic, locale, timezone, gender}>}
    */
-  static get(/* string */ fbSenderId) {
+  static get(fbSenderId: string): Promise<Profile> {
     const options = {
       method: 'GET',
       url: `${FbConstants.GRAPH_API_URL}/${fbSenderId}`,

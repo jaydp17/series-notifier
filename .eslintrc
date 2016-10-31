@@ -1,5 +1,8 @@
 {
-  "extends": "airbnb/base",
+  "extends": [
+    "airbnb/base",
+    "plugin:flowtype/recommended"
+  ],
   "env": {
     "node": true
   },
@@ -20,5 +23,8 @@
   },
   "globals": {
     "Models": true
-  }
+  },
+  "plugins": [
+    "flowtype"
+  ]
 }

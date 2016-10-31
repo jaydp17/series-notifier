@@ -1,3 +1,5 @@
+// @flow
+
 import GetStartedButtonController from '../controllers/get-started-button.controller';
 
 export default function () {

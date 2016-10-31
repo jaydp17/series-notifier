@@ -1,3 +1,5 @@
+// @flow
+
 import { models as Models } from '../server';
 
 // stores all the unique imdbIds people have already subscribed to
@@ -17,7 +19,7 @@ Models.User.find({
     d.forEach(ep => ImdbIds.add(ep.imdbId));
     return undefined;
   })
-  .then(() => [ ...ImdbIds ])
+  .then(() => Array.from(ImdbIds))
   .map(imdbId => Models.NextEpisodeCache.updateSeries(imdbId))
   .then(console.log) // eslint-disable-line no-console
   .then(() => console.log('done')) // eslint-disable-line no-console

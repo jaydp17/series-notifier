@@ -1,3 +1,5 @@
+// @flow
+
 import Promise from 'bluebird';
 import moment from 'moment';
 
@@ -6,6 +8,9 @@ import TraktController from './trakt.controller';
 import MsgController from './msg.controller';
 import ProfileController from './profile.controller';
 import BotConfig from '../bot-config';
+
+import type { Series } from '../models/series';
+import type { Carousel } from './msg.controller'; // eslint-disable-line no-duplicate-imports
 
 // coz es6 module import/export don't load json files
 const Constants = require('../constants.json');
@@ -21,7 +26,7 @@ export default class BotController {
    * @param text The message that the user sent
    * @returns {Promise}
    */
-  static onMessage(/* string */ senderId, /* string */ text) {
+  static onMessage(senderId: string, text: string): Promise<Carousel> {
     return TraktController.search(text)
       .filter(series => series.running)
       .then(seriesList => BotController.showSeriesAccToSubscription(seriesList, senderId));
@@ -36,11 +41,11 @@ export default class BotController {
    * @param senderId The social id of the sender
    * @returns {Promise}
    */
-  static showSeriesAccToSubscription(/* Array<Series> */ seriesList, /* string */ senderId) {
+  static showSeriesAccToSubscription(seriesList: Array<Series>, senderId: string): Promise<Carousel> {
     return Promise.props({
       seriesList,
       subscribedList: Models.User.myShows(senderId),
-    }).then((/* {seriesList, subscribedList} */ result) => {
+    }).then((result: { seriesList: Array<Series>, subscribedList: Array<Series> }) => {
       const { seriesList, subscribedList } = result; // eslint-disable-line no-shadow
       const actionList = new Array(seriesList.length).fill(Actions.SUBSCRIBE);
       const buttonTextList = new Array(seriesList.length).fill(ButtonTexts.SUBSCRIBE);
@@ -64,7 +69,7 @@ export default class BotController {
    * @param series The series on which the action was performed
    * @returns {Promise}
    */
-  static onPostBack(/* string */ senderId, /* string */ action, /* Series */ series) {
+  static onPostBack(senderId: string, action: string, series: Series): Promise<any> {
     switch (action) {
       case Actions.GET_STARTED:
         return BotController.getStarted(senderId);
@@ -95,7 +100,7 @@ export default class BotController {
    * @param action Action associated with the button
    * @returns {Promise}
    */
-  static onQuickReply(/* string */ senderId, /* string */ action) {
+  static onQuickReply(senderId: string, action: string): Promise<{text: string}> {
     switch (action) {
       case Actions.I_WILL_SEARCH:
         return BotController.searchMessage();
@@ -110,7 +115,7 @@ export default class BotController {
    * @param senderId Social Id of the user (in Fb case, the senderId)
    * @returns {Promise.<{text: string, quick_replies: Array}>}
    */
-  static getStarted(/* string */ senderId) {
+  static getStarted(senderId: string): Promise<{text: string, quick_replies: Array<any>}> {
     return ProfileController.get(senderId)
       .then(profile => ({
         text: `Hey ${profile.first_name}!\n` +
@@ -121,9 +126,8 @@ export default class BotController {
 
   /**
    * Message to show when the user clicks "I'll search"
-   * @returns {Promise.<{text: string}>}
    */
-  static searchMessage() {
+  static searchMessage(): Promise<{text: string}> {
     return Promise.resolve({
       text: 'Cool! Just type the name of the series & I\'ll search it for you',
     });
@@ -133,9 +137,8 @@ export default class BotController {
    * Subscribes to a given series
    * @param senderId Social Id of the user (in Fb case, the senderId)
    * @param series The series to subscribe
-   * @returns {Promise.<string>}
    */
-  static subscribe(/* string */ senderId, /* Series */ series) {
+  static subscribe(senderId: string, series: Series): Promise<{text: string}> {
     return Models.User.addSubscription(senderId, series)
       .then(() => ({ text: `Subscribed to ${series.name}` }));
   }
@@ -144,9 +147,8 @@ export default class BotController {
    * Un-Subscribes from a series
    * @param senderId Social Id of the user (in Fb case, the senderId)
    * @param series The series to un-subscribe from
-   * @returns {Promise.<string>}
    */
-  static unSubscribe(/* string */ senderId, /* Series */ series) {
+  static unSubscribe(senderId: string, series: Series): Promise<{text: string}> {
     return Models.User.removeSubscription(senderId, series)
       .then(() => ({ text: `Un-subscribed from ${series.name}` }));
   }
@@ -156,7 +158,7 @@ export default class BotController {
    * @param senderId Social Id of the user requesting
    * @returns {Promise}
    */
-  static myShows(/* string */ senderId) {
+  static myShows(senderId: string): Promise<Carousel | {text: string}> {
     return Models.User.myShows(senderId)
       .then((seriesList) => {
         if (seriesList.length === 0) {
@@ -171,14 +173,13 @@ export default class BotController {
   /**
    * Returns all the Trending shows
    * @param senderId Social Id of the user requesting
-   * @returns {Promise.<Series>}
    */
-  static showTrending(/* string */ senderId) {
+  static showTrending(senderId: string): Promise<Carousel> {
     return Models.Trending.get()
       .then(seriesList => BotController.showSeriesAccToSubscription(seriesList, senderId));
   }
 
-  static nextEpisodeDate(/* Series */ series) {
+  static nextEpisodeDate(series: Series): Promise<{text: string}> {
     // eslint-disable-next-line max-len
     const unknownEpMsg = { text: `Sorry, I don't know the exact release date of ${series.name}'s next episode.` };
     return TraktController.getNextEpisode(series.imdbId)

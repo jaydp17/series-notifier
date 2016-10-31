@@ -1,3 +1,5 @@
+// @flow
+
 import loopback from 'loopback';
 import boot from 'loopback-boot';
 import loopbackConsole from 'loopback-console';
@@ -24,7 +26,7 @@ boot(app, __dirname, (err) => {
 
   if (loopbackConsole.activated()) {
     loopbackConsole.start(app, { prompt: 'app # ' });
-  } else if (require.main === module) {
+  } else if ((require: any).main === module) {
     app.start();
   }
 });

@@ -1,18 +1,20 @@
+// @flow
+
 import Promise from 'bluebird';
 import _object from 'lodash/object';
 import _array from 'lodash/array';
-import TraktApi from './trakt.api';
 
+import TraktApi from './trakt.api';
 import TvDbController from './tvdb.controller';
+import type { Series, TraktEpisode } from '../models/series';
 
 export default class TraktController {
 
   /**
    * Searches Tv Shows based on the query provided
    * @param query A piece of text that is matched against the title of the Tv Show
-   * @return {Promise<Array<Series>>}
    */
-  static search(/* string */ query) {
+  static search(query: string): Promise<Array<Series>> {
     return TraktApi.searchShow(query)
       .map(result => result.show)
       .filter(show => show.title && show.year && show.status)
@@ -26,9 +28,8 @@ export default class TraktController {
   /**
    * Returns the next episode of a Tv Show
    * @param imdbId IMDB ID of the Tv Show
-   * @return {Promise<TraktEpisode>}
    */
-  static getNextEpisode(/* string */ imdbId) {
+  static getNextEpisode(imdbId: string): Promise<TraktEpisode> {
     return TraktApi.nextEpisode(imdbId)
       .then((episode) => {
         if (!episode) return Promise.reject('next episode unknown');
@@ -48,7 +49,7 @@ export default class TraktController {
    * @return {TraktEpisode}
    * @private
    */
-  static _keepOnlyRequiredFields(episode) {
+  static _keepOnlyRequiredFields(episode): TraktEpisode {
     if (!episode) return episode;
     return _object.pick(episode, [ 'season', 'number', 'title', 'overview', 'first_aired' ]);
   }
@@ -56,10 +57,9 @@ export default class TraktController {
   /**
    * Fills in default values in empty fields
    * @param episode Episode Information
-   * @return {TraktEpisode}
    * @private
    */
-  static _correctEmptyFields(/* TraktEpisode */ episode) {
+  static _correctEmptyFields(episode: TraktEpisode): TraktEpisode {
     if (!episode) return episode;
     episode.title = episode.title ? episode.title : `Episode ${episode.number}`;
     return episode;
@@ -68,9 +68,8 @@ export default class TraktController {
   /**
    * Converts '2016-04-25T02:00:00.000Z' to Date Object
    * @param season Season Object
-   * @return {undefined}
    */
-  static _convertAirDate(/* {first_aired} */ season) {
+  static _convertAirDate(season: TraktEpisode): ?TraktEpisode {
     season.first_aired = (season.first_aired) ? new Date(season.first_aired) : null;
   }
 

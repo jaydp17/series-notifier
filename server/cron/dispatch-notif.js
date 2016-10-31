@@ -1,6 +1,10 @@
+// @flow
+
 import Promise from 'bluebird';
 import { models as Models } from '../server';
 import FbMsgSendController from '../controllers/fb-msg-send.controller';
+import type { Series, TraktEpisode } from '../models/series';
+import type { User } from '../models/user';
 
 const now = Date.now();
 const MINUTE = 60 * 1000;
@@ -8,9 +12,8 @@ const MINUTE = 60 * 1000;
 /**
  * Find users subscribed to a series
  * @param imdbId IMDB id of the series
- * @returns {Promise<Array>}
  */
-function findUsers(imdbId) {
+function findUsers(imdbId: string): Promise<Array<User>> {
   return Models.Series.findOne({ where: { imdbId }, include: 'users' })
     .then(ep => ep.users());
 }
@@ -18,17 +21,15 @@ function findUsers(imdbId) {
 /**
  * Finds series from IMDB id
  * @param imdbId IMDB id of the series
- * @returns {Promise}
  */
-function findSeries(/* string */ imdbId) {
+function findSeries(imdbId: string): Promise<Series> {
   return Models.Series.findOne({ where: { imdbId } });
 }
 
 /**
  * Dispatch a notification to each subscribed user
- * @returns {Promise}
  */
-function dispatchNotif(user, series, episode) {
+function dispatchNotif(user: User, series: Series, episode: TraktEpisode): Promise<{text: string}> {
   const epNumber = (`00${episode.number}`).slice(-2);
   const seriesNumber = (`00${episode.season}`).slice(-2);
   return FbMsgSendController.send(user.socialId, {
@@ -40,11 +41,12 @@ function dispatchNotif(user, series, episode) {
  * Process each series
  * @returns {Promise}
  */
-function processEpisode(episode) {
+function processEpisode(episode: TraktEpisode): Promise<any> {
   return Promise.join(
     findUsers(episode.imdbId),
     findSeries(episode.imdbId),
-    (users, series) => Promise.map(users, user => dispatchNotif(user, series, episode))
+    (users: Array<User>, series: Series) =>
+      Promise.map(users, user => dispatchNotif(user, series, episode))
   );
 }
 

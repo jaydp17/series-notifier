@@ -1,0 +1,10 @@
+[ignore]
+<PROJECT_ROOT>/build/.*
+<PROJECT_ROOT>/node_modules/bcryptjs/src/bower.json
+
+[include]
+
+[libs]
+<PROJECT_ROOT>/flow-declarations/
+
+[options]

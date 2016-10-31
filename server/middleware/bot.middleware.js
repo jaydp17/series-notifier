@@ -1,3 +1,6 @@
+// @flow
+
+import Promise from 'bluebird';
 import Bot from 'messenger-bot';
 import BotController from '../controllers/bot.controller';
 
@@ -12,7 +15,7 @@ bot.on('error', (err) => {
   console.error('error occurred', err); // eslint-disable-line no-console
 });
 
-bot.on('message', (/* {sender, message} */ payload, reply) => {
+bot.on('message', (payload: {sender: Object, message: Object}, reply: Function) => {
   /** @type {{text, is_echo, quick_reply}} */
   const { message } = payload;
   const text = (message.text || '').trim();
@@ -20,14 +23,14 @@ bot.on('message', (/* {sender, message} */ payload, reply) => {
 
   const senderId = payload.sender.id;
 
-  let result;
-  if (message.quick_reply) {
-    const quickReply = JSON.parse(message.quick_reply.payload);
-    result = BotController.onQuickReply(senderId, quickReply.action);
-  } else {
-    result = BotController.onMessage(senderId, text);
-  }
-  result.then(results => reply(results, console.error)); // eslint-disable-line no-console
+  const getReply = (): Promise<any> => {
+    if (message.quick_reply) {
+      const quickReply = JSON.parse(message.quick_reply.payload);
+      return BotController.onQuickReply(senderId, quickReply.action);
+    }
+    return BotController.onMessage(senderId, text);
+  };
+  getReply().then(results => reply(results, console.error)); // eslint-disable-line no-console
 });
 
 /**

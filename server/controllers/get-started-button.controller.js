@@ -1,11 +1,14 @@
+// @flow
+
 import request from 'request-promise';
-import { getStartedButton } from '../bot-config';
+import BotConfig from '../bot-config';
 
 const FbConstants = require('../constants.json').fb;
 
 export default class GetStartedButtonController {
 
   static set() {
+    const { getStartedButton } = BotConfig;
     const options = {
       method: 'POST',
       url: `${FbConstants.GRAPH_API_URL}/me/thread_settings`,

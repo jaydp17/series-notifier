@@ -50,4 +50,24 @@
  * } TraktSeason
  */
 
-module.exports = {};
+export default function () {
+}
+
+export type Series = {
+  imdbId: string,
+  tvDbId: number,
+  name: string,
+  genre: Array<string>,
+  running: boolean,
+  rating: string,
+  length: number,
+  fanArt: string,
+}
+
+export type TraktEpisode = {
+  season: number,
+  number: number,
+  title: string,
+  overview: string,
+  first_aired: Date,
+};

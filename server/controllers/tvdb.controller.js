@@ -1,5 +1,8 @@
+// @flow
+
 import TVDB from 'node-tvdb';
 import Promise from 'bluebird';
+import type { Series } from '../models/series';
 
 const ApiKeys = require('../constants.json').ApiKeys;
 
@@ -19,7 +22,7 @@ export default class TvDbController {
    * @see {@link TraktController#search(string)}
    * @deprecated
    */
-  static search(/* string */ query) {
+  static search(query: string): Promise<Array<Series>> {
     return TvDbController._getSeriesByName(query)
       .then(this._catchEmptyData)
       .map(show => show.id)
@@ -30,18 +33,16 @@ export default class TvDbController {
   /**
    * A method that makes a call to TVDB and fires a search query
    * @param query Text to search
-   * @return {Promise}
    */
-  static _getSeriesByName(/* string */ query) {
+  static _getSeriesByName(query: string): Promise<any> {
     return Promise.resolve(tvdb.getSeriesByName(query));
   }
 
   /**
    * Returns Tv Shows based on TvDb IDs
    * @param tvDbIds An Array of TvDb Ids
-   * @return {Promise<Array<Series>>}
    */
-  static getSeriesByIds(/* Array<string> */ tvDbIds) {
+  static getSeriesByIds(tvDbIds: Array<string>): Promise<Array<Series>> {
     return Promise.map(tvDbIds, id => TvDbController._getSeriesById(id))
       .filter(TvDbController._filterData)
       .map(TvDbController._parseData);
@@ -50,10 +51,9 @@ export default class TvDbController {
   /**
    * Queries TvDb server for the result
    * @param tvDbId A Single TvDb Id string
-   * @return {Promise}
    * @private
    */
-  static _getSeriesById(/* string */ tvDbId) {
+  static _getSeriesById(tvDbId: string): Promise<any> {
     return tvdb.getSeriesById(tvDbId)
       .catch(err => console.error(err, `error loading tvDbId: ${tvDbId}`)); // eslint-disable-line no-console
   }
@@ -64,16 +64,15 @@ export default class TvDbController {
    * @param results TvDb Search Results
    * @return {Array}
    */
-  static _catchEmptyData(results) {
+  static _catchEmptyData(results: Array<any> | null): Array<any> {
     return results === null ? [] : results;
   }
 
   /**
    * Filters shows that don't have basic data filled in
    * @param data Data Received from TvDb
-   * @return {boolean}
    */
-  static _filterData(/* {id, IMDB_ID, SeriesName, Genre, Status, Runtime, Rating, poster} */ data) {
+  static _filterData(/* {id, IMDB_ID, SeriesName, Genre, Status, Runtime, Rating, poster} */ data): boolean {
     if (!data) return false;
     return data.id && data.IMDB_ID && data.SeriesName && data.Genre && data.Status
       && data.Runtime && data.Rating && data.poster && true;
@@ -82,9 +81,8 @@ export default class TvDbController {
   /**
    * Parses Data from TvDb to data that the Client app can understand
    * @param data Data Received from TvDb
-   * @return {Series}
    */
-  static _parseData(/* {id, IMDB_ID, SeriesName, Genre, Status, Runtime, Rating, poster, fanart} */ data) {
+  static _parseData(/* {id, IMDB_ID, SeriesName, Genre, Status, Runtime, Rating, poster, fanart} */ data): Series {
     return {
       imdbId: data.IMDB_ID,
       tvDbId: data.id,
@@ -101,9 +99,8 @@ export default class TvDbController {
   /**
    * Arranges the currently running shows on the top
    * @param shows An array of Tv Shows to sort
-   * @return {Array.<Series>}
    */
-  static _sortShowsByRunning(/* Array<Series> */ shows) {
+  static _sortShowsByRunning(shows: Array<Series>): Array<Series> {
     return shows.sort((a, b) => b.running - a.running);
   }
 }

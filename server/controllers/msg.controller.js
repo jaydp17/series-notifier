@@ -1,7 +1,29 @@
+// @flow
+
+import type{ Series } from '../models/series';
+import type { Button } from './persistentmenu.controller';
+
 const constants = require('../constants.json');
 
 const Actions = constants.Actions;
 const ButtonTexts = constants.ButtonTexts;
+
+export type CarouselElement = {
+  title: string,
+  subtitle: string,
+  image_url: string,
+  buttons: Array<Button>,
+};
+
+export type Carousel = {
+  attachment: {
+    type: string,
+    payload: {
+      template_type: string,
+      elements: Array<CarouselElement>,
+    }
+  }
+};
 
 export default class MsgController {
 
@@ -12,8 +34,7 @@ export default class MsgController {
    * @param buttonTextList The texts that should appear on the buttons
    * @returns {{}}
    */
-  static carousel(/* Array<Series> */ seriesList, /* Array<string> */ actionList,
-                  /* Array<string> */ buttonTextList) {
+  static carousel(seriesList: Array<Series>, actionList: Array<string>, buttonTextList: Array<string>): Carousel {
     const result = {
       attachment: {
         type: 'template',
@@ -44,8 +65,7 @@ export default class MsgController {
    * @param buttonTexts A list of texts that should appear on the buttons
    * @returns {{}}
    */
-  static carouselElement(/* Series */ series, /* Array<string> */ actions,
-                         /* Array<string> */ buttonTexts) {
+  static carouselElement(series: Series, actions: Array<string>, buttonTexts: Array<string>): CarouselElement {
     const options = {
       title: series.name,
       subtitle: series.genre.join(', '),

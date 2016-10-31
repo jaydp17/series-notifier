@@ -7,7 +7,8 @@
     "lint": "eslint .",
     "start": "node build/server/server.js",
     "posttest": "npm run lint && nsp check",
-    "build": "babel server -d build/server --copy-files"
+    "build": "babel server -d build/server --copy-files",
+    "flow-typed": "flow-typed"
   },
   "engineStrict": true,
   "engines": {
@@ -35,12 +36,17 @@
   },
   "devDependencies": {
     "babel-cli": "6.18.0",
+    "babel-eslint": "7.1.0",
     "babel-plugin-add-module-exports": "0.2.1",
+    "babel-plugin-transform-flow-strip-types": "6.18.0",
     "babel-preset-env": "0.0.6",
     "babel-preset-es2015": "6.18.0",
     "eslint": "3.9.0",
     "eslint-config-airbnb": "12.0.0",
+    "eslint-plugin-flowtype": "2.25.0",
     "eslint-plugin-import": "2.0.1",
+    "flow-bin": "0.34.0",
+    "flow-typed": "2.0.0",
     "nsp": "2.6.1"
   },
   "repository": {

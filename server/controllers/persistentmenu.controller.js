@@ -1,10 +1,18 @@
+// @flow
+
 import request from 'request-promise';
 
 const FbConstants = require('../constants.json').fb;
 
+export type Button = {
+  type: string,
+  title: string,
+  payload: string,
+};
+
 export default class PersistentMenu {
 
-  static set(/* Array<{type, title, payload}> */ buttons) {
+  static set(buttons: Array<Button>) {
     const options = {
       method: 'POST',
       url: 'https://graph.facebook.com/v2.6/me/thread_settings',

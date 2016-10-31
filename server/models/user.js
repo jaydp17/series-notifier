@@ -1,5 +1,16 @@
-export default function (User) {
-  User.addSubscription = function (/* string */ socialId, /* Series */ series) {
+// @flow
+
+import Promise from 'bluebird';
+import type { Series } from './series';
+import type { UserModel } from '../../flow-declarations/loopback-models';
+
+export type User = {
+  socialId: string,
+  subscriptions: () => Array<Series>
+}
+
+export default function (User: UserModel) { // eslint-disable-line no-shadow
+  User.addSubscription = function (socialId: string, series: Series) {
     const { tvDbId } = series;
     return Promise.join(
       User.app.models.Series.findOrCreate({ where: { tvDbId } }, series),
@@ -11,7 +22,7 @@ export default function (User) {
     });
   };
 
-  User.removeSubscription = function (/* string */ socialId, /* Series */ series) {
+  User.removeSubscription = function (socialId: string, series: Series) {
     const { tvDbId } = series;
     return Promise.join(
       User.app.models.Series.findOne({ where: { tvDbId } }),
@@ -23,11 +34,10 @@ export default function (User) {
   /**
    * Returns all the shows subscribed by a user
    * @param socialId Social Id of the user requesting
-   * @returns {Promise.<Series>}
    */
-  User.myShows = function (socialId) {
+  User.myShows = function (socialId: string): Promise<Array<Series>> {
     return User.findOne({ where: { socialId }, include: 'subscriptions' })
-      .then((/* {subscriptions} */ result) => {
+      .then((result: User) => {
         if (!result) return [];
         return result.subscriptions();
       });

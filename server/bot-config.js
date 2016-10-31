@@ -1,3 +1,5 @@
+// @flow
+
 const Constants = require('./constants.json');
 
 const Actions = Constants.Actions;

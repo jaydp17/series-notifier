@@ -1,14 +1,17 @@
+// @flow
+
 import TvDbController from '../controllers/tvdb.controller';
 import TraktApi from '../controllers/trakt.api';
+import type { TrendingModel } from '../../flow-declarations/loopback-models';
 
-export default function (Trending) {
+export default function (Trending: TrendingModel) {
   /**
    * Gets the trending series data from the cache (if exists) or from TraktTV
    * @returns {Promise}
    */
   Trending.get = function () {
     return Trending.find()
-      .then((/* Array */ trending) => {
+      .then((trending) => {
         if (!trending.length) {
           return Trending.updateTrendingData();
         }
@@ -29,8 +32,6 @@ export default function (Trending) {
         data.createdAt = new Date();
         return data;
       })
-      .then(data =>
-         Trending.create(data)
-      );
+      .then(data => Trending.create(data));
   };
 }

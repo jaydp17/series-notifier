@@ -1,3 +1,6 @@
+// @flow
+
+import Promise from 'bluebird';
 import request from 'request-promise';
 
 const apiKey = require('../constants.json').ApiKeys.TRAKT;
@@ -16,7 +19,7 @@ export default class TraktApi {
    * @param query The text to search
    * @return {Promise.<*>}
    */
-  static searchShow(/* string */ query) {
+  static searchShow(query: string): Promise<any> {
     const options = {
       method: 'GET',
       url: `${BASE_URL}/search/show`,
@@ -30,7 +33,7 @@ export default class TraktApi {
     return fireRequest(options);
   }
 
-  static showSeasons(/* string */ imdbId) {
+  static showSeasons(imdbId: string): Promise<any> {
     const options = {
       method: 'GET',
       url: `${BASE_URL}/shows/${imdbId}/seasons`,
@@ -47,7 +50,7 @@ export default class TraktApi {
    * Queries Trakt Server for trending shows
    * @return {Promise}
    */
-  static showTrending() {
+  static showTrending(): Promise<any> {
     const options = {
       method: 'GET',
       url: `${BASE_URL}/shows/trending`,
@@ -57,7 +60,7 @@ export default class TraktApi {
     return fireRequest(options);
   }
 
-  static nextEpisode(/* string */ imdbId) {
+  static nextEpisode(imdbId: string): Promise<any> {
     const options = {
       method: 'GET',
       url: `${BASE_URL}/shows/${imdbId}/next_episode`,
@@ -67,7 +70,7 @@ export default class TraktApi {
     return fireRequest(options);
   }
 
-  static episodeSummary(/* string */ imdbId, /* number */ seasonNum, /* number */ episodeNum) {
+  static episodeSummary(imdbId: string, seasonNum: number, episodeNum: number): Promise<any> {
     const options = {
       method: 'GET',
       url: `${BASE_URL}/shows/${imdbId}/seasons/${seasonNum}/episodes/${episodeNum}`,
