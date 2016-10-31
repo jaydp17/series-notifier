@@ -50,7 +50,7 @@ function dispatchNotif(user, series, episode) {
   const epNumber = ('00' + episode.number).slice(-2);
   const seriesNumber = ('00' + episode.season).slice(-2);
   return FbMsgSendController.send(user.socialId, {
-    text: `${seriesNumber} S${episode.season}E${epNumber} is live`,
+    text: `${series.name} S${seriesNumber}E${epNumber} is live`,
   });
 }
 
