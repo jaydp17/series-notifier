@@ -16,4 +16,6 @@ RUN yarn
 
 COPY . /src
 
+RUN yarn build
+
 CMD yarn start

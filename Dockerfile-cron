@@ -16,6 +16,8 @@ RUN yarn
 
 COPY . /src
 
+RUN yarn build
+
 COPY server/cron/crontab /var/spool/cron/crontabs/root
 
 CMD crond -l 2 -f
