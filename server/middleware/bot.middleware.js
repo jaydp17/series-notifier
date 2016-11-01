@@ -30,7 +30,11 @@ bot.on('message', (payload: {sender: Object, message: Object}, reply: Function) 
     }
     return BotController.onMessage(senderId, text);
   };
-  getReply().then(results => reply(results, console.error)); // eslint-disable-line no-console
+  getReply().then(results => reply(results, console.error)) // eslint-disable-line no-console
+    .catch((err) => {
+      console.error(err); // eslint-disable-line no-console
+      return reply({ text: 'Sorry something went wrong :/' }, console.log); // eslint-disable-line no-console
+    });
 });
 
 /**
