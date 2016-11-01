@@ -43,7 +43,11 @@ bot.on('postback', (payload, reply) => {
   const { action, series } = data;
   const senderId = payload.sender.id;
   BotController.onPostBack(senderId, action, series)
-    .then(result => reply(result, console.log)); // eslint-disable-line no-console
+    .then(result => reply(result, console.log)) // eslint-disable-line no-console
+    .catch((err) => {
+      console.error(err); // eslint-disable-line no-console
+      return reply({ text: 'Sorry something went wrong :(' }, console.log); // eslint-disable-line no-console
+    });
 });
 
 export default function () {

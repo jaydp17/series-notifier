@@ -50,7 +50,7 @@ export default class BotController {
       const actionList = new Array(seriesList.length).fill(Actions.SUBSCRIBE);
       const buttonTextList = new Array(seriesList.length).fill(ButtonTexts.SUBSCRIBE);
       subscribedList.forEach((series) => {
-        const index = seriesList.findIndex(item => item.tvDbId === series.tvDbId);
+        const index = seriesList.findIndex(item => parseInt(item.tvDbId, 10) === series.tvDbId);
 
         // mark subscribed series, & show un-subscribe button
         if (index !== -1) {

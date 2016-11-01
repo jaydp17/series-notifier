@@ -7,7 +7,7 @@
     "lint": "eslint .",
     "start": "node build/server/server.js",
     "posttest": "npm run lint && nsp check",
-    "build": "babel server -d build/server --copy-files",
+    "build": "babel server -d build/server --copy-files --source-maps",
     "flow-typed": "flow-typed"
   },
   "engineStrict": true,
