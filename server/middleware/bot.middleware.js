@@ -46,7 +46,7 @@ bot.on('postback', (payload, reply) => {
     .then(result => reply(result, console.log)) // eslint-disable-line no-console
     .catch((err) => {
       console.error(err); // eslint-disable-line no-console
-      return reply({ text: 'Sorry something went wrong :(' }, console.log); // eslint-disable-line no-console
+      return reply({ text: 'Sorry something went wrong :/' }, console.log); // eslint-disable-line no-console
     });
 });
 
