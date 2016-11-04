@@ -89,6 +89,9 @@ export default class BotController {
       case Actions.NEXT_EP_DATE:
         return BotController.nextEpisodeDate(series);
 
+      case Actions.HELP:
+        return BotController.help();
+
       default:
         return Promise.reject('unknown action');
     }
@@ -196,6 +199,12 @@ export default class BotController {
         console.error('unknown next episode:', series.imdbId); // eslint-disable-line no-console
         return unknownEpMsg;
       });
+  }
+
+  static help() {
+    return Promise.resolve({
+      text: 'Just send me the name for the series you are looking for, or select "Show Trending" from the menu.',
+    });
   }
 
 }
