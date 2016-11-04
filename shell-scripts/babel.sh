@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env sh
 
 babel server -d build/server --copy-files --source-maps
 babel client -d build/client --copy-files --source-maps
