@@ -27,9 +27,23 @@ export default class BotController {
    * @returns {Promise}
    */
   static onMessage(senderId: string, text: string): Promise<Carousel> {
+    const noSeriesMsg = 'no_series_found';
     return TraktController.search(text)
       .filter(series => series.running)
-      .then(seriesList => BotController.showSeriesAccToSubscription(seriesList, senderId));
+      .then((seriesList) => {
+        if (seriesList.length === 0) {
+          return Promise.reject(noSeriesMsg);
+        }
+        return seriesList;
+      })
+      .then(seriesList => BotController.showSeriesAccToSubscription(seriesList, senderId))
+      .catch((err) => {
+        if (err === noSeriesMsg) {
+          return { text: 'Sorry, no Series found with that name :/' };
+        }
+        console.error(err); // eslint-disable-line no-console
+        return { text: 'Sorry something went wrong :/' };
+      });
   }
 
   /**
