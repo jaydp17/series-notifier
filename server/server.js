@@ -3,8 +3,13 @@
 import loopback from 'loopback';
 import boot from 'loopback-boot';
 import loopbackConsole from 'loopback-console';
+import path from 'path';
 
 const app = module.exports = loopback();
+
+// Server side rendering
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
 
 app.start = function () {
   // start the web server
