@@ -121,6 +121,8 @@ export default class BotController {
     switch (action) {
       case Actions.I_WILL_SEARCH:
         return BotController.searchMessage();
+      case Actions.SHOW_TRENDING:
+        return BotController.showTrending(senderId);
 
       default:
         return Promise.reject('unknown action');
