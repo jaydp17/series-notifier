@@ -9,11 +9,8 @@ export default function (server: any) {
     const params = {
       botName: config.botName,
       fqdn: config.fqdn,
+      fbUsername: config.fb.username,
       hostUrl: `${config.protocol}://${config.fqdn}:${config.port}`,
-      messengerUrl: `m.me/${config.fb.messengerId}`,
-      messengerUrlWithProtocol: `http://m.me/${config.fb.messengerId}`,
-      fbPageUrl: `fb.com/${config.fb.pageHandle}`,
-      fbPageUrlWithProtocol: `http://fb.com/${config.fb.pageHandle}`,
     };
     res.render('privacy', params);
   });
