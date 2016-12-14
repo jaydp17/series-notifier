@@ -5,6 +5,9 @@ import boot from 'loopback-boot';
 import loopbackConsole from 'loopback-console';
 import path from 'path';
 
+// load sentry
+require('./utils/sentry');
+
 const app = module.exports = loopback();
 
 // Server side rendering

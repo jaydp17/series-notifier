@@ -3,6 +3,7 @@
 import Promise from 'bluebird';
 
 import TraktController from '../controllers/trakt.controller';
+import * as Logger from '../utils/logger';
 import type { NextEpisodeCacheModel } from '../../flow-declarations/loopback-models';
 
 export type NextEpisodeCache = {
@@ -31,7 +32,6 @@ export default function (NextEpisodeCache: NextEpisodeCacheModel) { // eslint-di
       .tap(episode => episode.imdbId = imdbId) // eslint-disable-line no-return-assign
       .tap(() => NextEpisodeCache.destroyAll({ imdbId }))
       .then(episode => NextEpisodeCache.create(episode))
-      // eslint-disable-next-line no-console
-      .catch(err => console.error(err)); // called when there's no next episode
+      .catch(err => Logger.error(err)); // called when there's no next episode
   };
 }

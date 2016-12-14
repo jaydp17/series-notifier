@@ -3,6 +3,7 @@
 import Promise from 'bluebird';
 import { models as Models } from '../server';
 import FbMsgSendController from '../controllers/fb-msg-send.controller';
+import * as Logger from '../utils/logger';
 import type { Series, TraktEpisode } from '../models/series';
 import type { User } from '../models/user';
 
@@ -63,5 +64,5 @@ Models.NextEpisodeCache.find({
     },
   },
 }).map(processEpisode)
-  .then(console.log).catch(console.error) // eslint-disable-line no-console
+  .then(console.log).catch(Logger.error) // eslint-disable-line no-console
   .then(() => process.exit(0));

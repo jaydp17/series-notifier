@@ -2,6 +2,9 @@
 
 import TVDB from 'node-tvdb';
 import Promise from 'bluebird';
+
+import * as Logger from '../utils/logger';
+
 import type { Series } from '../models/series';
 
 const ApiKeys = require('../constants.json').ApiKeys;
@@ -55,7 +58,7 @@ export default class TvDbController {
    */
   static _getSeriesById(tvDbId: string): Promise<any> {
     return tvdb.getSeriesById(tvDbId)
-      .catch(err => console.error(err, `error loading tvDbId: ${tvDbId}`)); // eslint-disable-line no-console
+      .catch(err => Logger.error(err, { message: `error loading tvDbId: ${tvDbId}` }));
   }
 
   /**

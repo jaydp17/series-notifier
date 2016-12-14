@@ -3,6 +3,7 @@
 import Promise from 'bluebird';
 import Bot from 'messenger-bot';
 import BotController from '../controllers/bot.controller';
+import * as Logger from '../utils/logger';
 
 const Constants = require('../constants.json');
 
@@ -12,7 +13,7 @@ const bot = new Bot({
 });
 
 bot.on('error', (err) => {
-  console.error('error occurred', err); // eslint-disable-line no-console
+  Logger.error(err);
 });
 
 bot.on('message', (payload: {sender: Object, message: Object}, reply: Function) => {
@@ -30,9 +31,9 @@ bot.on('message', (payload: {sender: Object, message: Object}, reply: Function) 
     }
     return BotController.onMessage(senderId, text);
   };
-  getReply().then(results => reply(results, console.error)) // eslint-disable-line no-console
+  getReply().then(results => reply(results, Logger.error))
     .catch((err) => {
-      console.error(err); // eslint-disable-line no-console
+      Logger.error(err);
       return reply({ text: 'Sorry something went wrong :/' }, console.log); // eslint-disable-line no-console
     });
 });
@@ -49,7 +50,7 @@ bot.on('postback', (payload, reply) => {
   BotController.onPostBack(senderId, action, series)
     .then(result => reply(result, console.log)) // eslint-disable-line no-console
     .catch((err) => {
-      console.error(err); // eslint-disable-line no-console
+      Logger.error(err);
       return reply({ text: 'Sorry something went wrong :/' }, console.log); // eslint-disable-line no-console
     });
 });

@@ -2,6 +2,7 @@
 
 import PersistentMenu from '../controllers/persistentmenu.controller';
 import BotConfig from '../bot-config';
+import * as Logger from '../utils/logger';
 
 export default function () {
   if (process.env.CRON) return Promise.resolve();
@@ -11,5 +12,5 @@ export default function () {
     .map(key => persistentMenu[key]);
 
   return PersistentMenu.set(buttons)
-    .then(console.log).catch(console.error); // eslint-disable-line no-console
+    .then(console.log).catch(Logger.error); // eslint-disable-line no-console
 }

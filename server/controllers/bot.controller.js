@@ -8,6 +8,7 @@ import TraktController from './trakt.controller';
 import MsgController from './msg.controller';
 import ProfileController from './profile.controller';
 import BotConfig from '../bot-config';
+import * as Logger from '../utils/logger';
 
 import type { Series } from '../models/series';
 import type { Carousel } from './msg.controller'; // eslint-disable-line no-duplicate-imports
@@ -41,7 +42,7 @@ export default class BotController {
         if (err === noSeriesMsg) {
           return { text: 'Sorry, no Series found with that name :/' };
         }
-        console.error(err); // eslint-disable-line no-console
+        Logger.error(err);
         return { text: 'Sorry something went wrong :/' };
       });
   }
@@ -212,7 +213,7 @@ export default class BotController {
         };
       })
       .catch(() => {
-        console.error('unknown next episode:', series.imdbId); // eslint-disable-line no-console
+        Logger.error(new Error(`unknown next episode: ${series.imdbId}`));
         return unknownEpMsg;
       });
   }
