@@ -1,6 +1,7 @@
 import raven from 'raven';
+import config from '../config'; // eslint-disable-line import/extensions
 
-const sentry = new raven.Client('https://97f72c710a3242d1814c68d9590e8d3c:9544bf4a57ca46f48f21841cae159a9b@sentry.io/122234');
+const sentry = new raven.Client(config.sentry);
 sentry.patchGlobal();
 
 module.exports = sentry;
