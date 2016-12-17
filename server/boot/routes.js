@@ -53,7 +53,7 @@ export default function (server: any) {
       } else if (quickReply) {
         _promise = BotController.processQuickReply(quickReply, sender.id);
       } else {
-        _promise = Promise.reject(new CustomError('Message & PostBack both are null', { messageObj }));
+        _promise = Promise.reject(new CustomError('Message & PostBack both are null', { messagingObj }));
       }
       _promise
         .then(result => MessengerApi.sendMessage(sender.id, result))
