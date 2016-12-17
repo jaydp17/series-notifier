@@ -1,5 +1,7 @@
 // @flow
 
+import 'source-map-support/register';
+
 import loopback from 'loopback';
 import boot from 'loopback-boot';
 import loopbackConsole from 'loopback-console';
