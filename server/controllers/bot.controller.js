@@ -13,7 +13,7 @@ import CustomError from '../utils/custom-error';
 
 import type { Series } from '../models/series';
 import type { Carousel } from './msg.controller'; // eslint-disable-line no-duplicate-imports
-import type { FbMessage, FbPostBack } from '../../flow-declarations/loopback-models';
+import type { FbMessage, FbPostBack, FbQuickReply } from '../../flow-declarations/loopback-models';
 
 // coz es6 module import/export don't load json files
 const Constants = require('../constants.json');
@@ -53,6 +53,21 @@ export default class BotController {
       return Promise.reject(error);
     }
     return BotController.onPostBack(senderId, payload.action, payload.series);
+  }
+
+  /**
+   * Parses the facebook QuickReply object and dispatches the control flow
+   * @param quickReply QuickReply object sent by facebook
+   * @param senderId Id of the sender
+   * @returns {Promise}
+   */
+  static processQuickReply(quickReply: FbQuickReply, senderId: string): Promise<any> {
+    const payload = JSON.parse(quickReply.payload);
+    if (!payload.action) {
+      const error = new CustomError('Action not found in QuickReply payload', { payload });
+      return Promise.reject(error);
+    }
+    return BotController.onQuickReply(senderId, payload.action);
   }
 
   /**

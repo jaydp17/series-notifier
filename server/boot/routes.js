@@ -42,12 +42,14 @@ export default function (server: any) {
     const { entry } = req.body;
     const messagingArr = entry[0].messaging;
     messagingArr.forEach((messagingObj) => {
-      const { message, postback, sender } = messagingObj;
+      const { message, postback, sender, quick_reply: quickReply } = messagingObj;
       let _promise;
       if (postback) {
         _promise = BotController.processPostBack(postback, sender.id);
       } else if (message) {
         _promise = BotController.processIncoming(message, sender.id);
+      } else if (quickReply) {
+        _promise = BotController.processQuickReply(quickReply, sender.id);
       } else {
         _promise = Promise.reject(new CustomError('Message & PostBack both are null', { messageObj }));
       }
