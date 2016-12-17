@@ -1,7 +1,9 @@
 // @flow
 
 import request from 'request-promise';
-import config from '../config'; // eslint-disable-line import/extensions
+import app from '../server';
+
+const FbConstants = app.get('fb');
 
 export type Button = {
   type: string,
@@ -16,7 +18,7 @@ export default class PersistentMenu {
       method: 'POST',
       url: 'https://graph.facebook.com/v2.6/me/thread_settings',
       qs: {
-        access_token: config.fb.PAGE_TOKEN,
+        access_token: FbConstants.PAGE_TOKEN,
       },
       json: {
         setting_type: 'call_to_actions',
@@ -32,7 +34,7 @@ export default class PersistentMenu {
       method: 'DELETE',
       url: 'https://graph.facebook.com/v2.6/me/thread_settings',
       qs: {
-        access_token: config.fb.PAGE_TOKEN,
+        access_token: FbConstants.PAGE_TOKEN,
       },
       json: {
         setting_type: 'call_to_actions',

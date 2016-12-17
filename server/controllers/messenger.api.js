@@ -1,5 +1,7 @@
 import request from 'request-promise';
-import config from '../config'; // eslint-disable-line import/extensions
+import app from '../server';
+
+const FbConstants = app.get('fb');
 
 const fireRequest = options => request(options).promise();
 
@@ -8,9 +10,9 @@ class MessengerApi {
   static sendMessage(senderId, msgObj) {
     const options = {
       method: 'POST',
-      url: `${config.fb.GRAPH_API_URL}/me/messages`,
+      url: `${FbConstants.GRAPH_API_URL}/me/messages`,
       qs: {
-        access_token: config.fb.PAGE_TOKEN,
+        access_token: FbConstants.PAGE_TOKEN,
       },
       json: {
         recipient: {
@@ -25,9 +27,9 @@ class MessengerApi {
   static sendText(text, senderId) {
     const options = {
       method: 'POST',
-      url: `${config.fb.GRAPH_API_URL}/me/messages`,
+      url: `${FbConstants.GRAPH_API_URL}/me/messages`,
       qs: {
-        access_token: config.fb.PAGE_TOKEN,
+        access_token: FbConstants.PAGE_TOKEN,
       },
       json: {
         recipient: {

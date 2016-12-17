@@ -1,4 +1,3 @@
-import sentry from './sentry';
 import CustomError from './custom-error';
 
 // eslint-disable no-console
@@ -9,14 +8,14 @@ export const info = (msg: string, data: ?Object) => {
 
 export const error = (err: Error, data: ?Object) => {
   if (err instanceof CustomError) {
-    sentry.captureException(err, {
+    Sentry.captureException(err, {
       extra: err.extra,
       tags: {
         env: process.env.NODE_ENV,
       },
     });
   } else {
-    sentry.captureException(err, data);
+    Sentry.captureException(err, data);
   }
   console.error(err);
 };

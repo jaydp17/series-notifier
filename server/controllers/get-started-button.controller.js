@@ -2,7 +2,9 @@
 
 import request from 'request-promise';
 import BotConfig from '../bot-config';
-import config from '../config'; // eslint-disable-line import/extensions
+import app from '../server';
+
+const FbConstants = app.get('fb');
 
 export default class GetStartedButtonController {
 
@@ -10,9 +12,9 @@ export default class GetStartedButtonController {
     const { getStartedButton } = BotConfig;
     const options = {
       method: 'POST',
-      url: `${config.fb.GRAPH_API_URL}/me/thread_settings`,
+      url: `${FbConstants.GRAPH_API_URL}/me/thread_settings`,
       qs: {
-        access_token: config.fb.PAGE_TOKEN,
+        access_token: FbConstants.PAGE_TOKEN,
       },
       json: {
         setting_type: 'call_to_actions',
@@ -26,9 +28,9 @@ export default class GetStartedButtonController {
   static remove() {
     const options = {
       method: 'DELETE',
-      url: `${config.fb.GRAPH_API_URL}/me/thread_settings`,
+      url: `${FbConstants.GRAPH_API_URL}/me/thread_settings`,
       qs: {
-        access_token: config.fb.PAGE_TOKEN,
+        access_token: FbConstants.PAGE_TOKEN,
       },
       json: {
         setting_type: 'call_to_actions',

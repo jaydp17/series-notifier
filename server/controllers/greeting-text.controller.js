@@ -1,15 +1,17 @@
 // @flow
 
 import request from 'request-promise';
-import config from '../config'; // eslint-disable-line import/extensions
+import app from '../server';
+
+const FbConstants = app.get('fb');
 
 export default class GreetingTextController {
   static set(text: string) {
     const options = {
       method: 'POST',
-      url: `${config.fb.GRAPH_API_URL}/me/thread_settings`,
+      url: `${FbConstants.GRAPH_API_URL}/me/thread_settings`,
       qs: {
-        access_token: config.fb.PAGE_TOKEN,
+        access_token: FbConstants.PAGE_TOKEN,
       },
       json: {
         setting_type: 'greeting',
@@ -22,9 +24,9 @@ export default class GreetingTextController {
   static remove() {
     const options = {
       method: 'DELETE',
-      url: `${config.fb.GRAPH_API_URL}/me/thread_settings`,
+      url: `${FbConstants.GRAPH_API_URL}/me/thread_settings`,
       qs: {
-        access_token: config.fb.PAGE_TOKEN,
+        access_token: FbConstants.PAGE_TOKEN,
       },
       json: {
         setting_type: 'greeting',
