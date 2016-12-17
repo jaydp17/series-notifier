@@ -11,6 +11,7 @@
 *.tgz
 .DS_Store
 .project
+.vscode
 .strong-pm
 coverage
 node_modules
