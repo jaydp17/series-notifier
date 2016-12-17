@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "bluebird": "3.4.6",
+    "body-parser": "1.15.2",
     "compression": "1.6.2",
     "cors": "2.8.1",
     "ejs": "2.5.2",
@@ -27,7 +28,6 @@
     "loopback-connector-mongodb": "1.15.2",
     "loopback-console": "0.2.2",
     "loopback-datasource-juggler": "2.50.0",
-    "messenger-bot": "2.3.0",
     "moment": "2.15.2",
     "node-tvdb": "2.0.12",
     "raven": "1.1.1",

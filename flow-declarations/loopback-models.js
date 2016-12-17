@@ -36,3 +36,16 @@ declare type Models = {
   User: UserModel,
   NextEpisodeCache: NextEpisodeCacheModel,
 }
+
+declare type FbPostBack = {
+  payload: string,
+}
+
+declare type FbQuickReply = {
+  payload: string,
+}
+
+declare type FbMessage = {
+  text: string,
+  quick_reply: FbQuickReply,
+}

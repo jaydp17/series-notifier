@@ -2,8 +2,7 @@
 
 import Promise from 'bluebird';
 import request from 'request-promise';
-
-const FbConstants = require('../constants.json').fb;
+import config from '../config'; // eslint-disable-line import/extensions
 
 export type Profile = {
   first_name: string,
@@ -24,9 +23,9 @@ export default class ProfileController {
   static get(fbSenderId: string): Promise<Profile> {
     const options = {
       method: 'GET',
-      url: `${FbConstants.GRAPH_API_URL}/${fbSenderId}`,
+      url: `${config.fb.GRAPH_API_URL}/${fbSenderId}`,
       qs: {
-        access_token: FbConstants.PAGE_TOKEN,
+        access_token: config.fb.PAGE_TOKEN,
       },
       json: true,
     };

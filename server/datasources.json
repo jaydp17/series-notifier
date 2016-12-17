@@ -1,6 +1,6 @@
 {
   "mongo": {
-    "url": "mongodb://jaydp:yPKxV3YN5DTs5mYR@ds019986.mlab.com:19986/series-notifier",
+    "url": "mongodb://localhost:27017/series-notifier",
     "name": "mongo",
     "connector": "mongodb"
   }
