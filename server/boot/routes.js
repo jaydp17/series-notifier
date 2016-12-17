@@ -43,7 +43,6 @@ export default function (server: any) {
 
     const { entry } = req.body;
     const messagingArr = entry[0].messaging;
-    Logger.error(new CustomError('hey', { name: 'jaydeep' }));
     messagingArr.forEach((messagingObj) => {
       const { message, postback, sender, quick_reply: quickReply } = messagingObj;
       let _promise;
