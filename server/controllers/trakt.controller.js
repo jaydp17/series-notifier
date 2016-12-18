@@ -6,6 +6,7 @@ import _array from 'lodash/array';
 
 import TraktApi from './trakt.api';
 import TvDbController from './tvdb.controller';
+import CustomError from '../utils/custom-error';
 import type { Series, TraktEpisode } from '../models/series';
 
 export default class TraktController {
@@ -32,7 +33,7 @@ export default class TraktController {
   static getNextEpisode(imdbId: string): Promise<TraktEpisode> {
     return TraktApi.nextEpisode(imdbId)
       .then((episode) => {
-        if (!episode) return Promise.reject('next episode unknown');
+        if (!episode) return Promise.reject(new CustomError('next episode unknown', { imdbId }));
         return TraktApi.episodeSummary(imdbId, episode.season, episode.number);
       })
       .then(TraktController._keepOnlyRequiredFields)

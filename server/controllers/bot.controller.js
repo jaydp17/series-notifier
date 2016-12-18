@@ -157,7 +157,7 @@ export default class BotController {
         return BotController.help();
 
       default:
-        return Promise.reject('unknown action');
+        return Promise.reject(new CustomError('unknown action', { action }));
     }
   }
 
@@ -175,7 +175,7 @@ export default class BotController {
         return BotController.showTrending(senderId);
 
       default:
-        return Promise.reject('unknown action');
+        return Promise.reject(new CustomError('unknown action', { action }));
     }
   }
 
