@@ -185,7 +185,7 @@ export default class BotController {
    * @param senderId Social Id of the user (in Fb case, the senderId)
    * @returns {Rx.Observable.<{text: string, quick_replies: Array}>}
    */
-z  static getStarted(senderId: string): Rx.Observable<{ text: string, quick_replies: Array<any> }> {
+  static getStarted(senderId: string): Rx.Observable<{ text: string, quick_replies: Array<any> }> {
     return Rx.Observable.fromPromise(ProfileController.get(senderId))
       .map(profile => ({
         text: `Hey ${profile.first_name}!\n` +
