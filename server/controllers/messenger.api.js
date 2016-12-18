@@ -1,13 +1,17 @@
+// @flow
+
+import Rx from 'rxjs';
 import request from 'request-promise';
+
 import app from '../server';
 
 const FbConstants = app.get('fb');
 
-const fireRequest = options => request(options).promise();
+const fireRequest = options => Rx.Observable.fromPromise(request(options));
 
 class MessengerApi {
 
-  static sendMessage(senderId, msgObj) {
+  static sendMessage(senderId: string, msgObj: Object): rxjs$Observable<any> {
     const options = {
       method: 'POST',
       url: `${FbConstants.GRAPH_API_URL}/me/messages`,
@@ -24,7 +28,7 @@ class MessengerApi {
     return fireRequest(options);
   }
 
-  static sendText(text, senderId) {
+  static sendText(text: string, senderId: string): rxjs$Observable<any> {
     const options = {
       method: 'POST',
       url: `${FbConstants.GRAPH_API_URL}/me/messages`,

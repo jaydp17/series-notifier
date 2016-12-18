@@ -1,5 +1,7 @@
 // @flow
 
+import Rx from 'rxjs';
+
 import BotController from '../controllers/bot.controller';
 import * as Logger from '../utils/logger';
 import MessengerApi from '../controllers/messenger.api';
@@ -45,22 +47,28 @@ export default function (server: any) {
     const messagingArr = entry[0].messaging;
     messagingArr.forEach((messagingObj) => {
       const { message, postback, sender, quick_reply: quickReply } = messagingObj;
-      let _promise;
+      let _observable;
       if (postback) {
-        _promise = BotController.processPostBack(postback, sender.id);
+        _observable = BotController.processPostBack(postback, sender.id);
       } else if (message) {
-        _promise = BotController.processIncoming(message, sender.id);
+        _observable = BotController.processIncoming(message, sender.id);
       } else if (quickReply) {
-        _promise = BotController.processQuickReply(quickReply, sender.id);
+        _observable = BotController.processQuickReply(quickReply, sender.id);
       } else {
-        _promise = Promise.reject(new CustomError('Message & PostBack both are null', { messagingObj }));
+        _observable = Rx.Observable.throw(new CustomError('Message & PostBack both are null', { messagingObj }));
       }
-      _promise
-        .then(result => MessengerApi.sendMessage(sender.id, result))
+      _observable
+        .take(2)
+        .switchMap(msgObj => MessengerApi.sendMessage(sender.id, msgObj))
         .catch((err) => {
+          // whenever there's an error log it and let the user know
           Logger.error(err);
-          return MessengerApi.sendMessage({ text: 'Sorry something went wrong :/' }, console.log); // eslint-disable-line no-console
-        });
+          return MessengerApi.sendMessage(sender.id, { text: 'Sorry something went wrong :/' });
+        })
+        .subscribe(
+          result => Logger.info('result', result),
+          err => Logger.error(err),
+        );
     });
     return undefined;
   });

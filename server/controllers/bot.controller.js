@@ -2,6 +2,7 @@
 
 import Promise from 'bluebird';
 import moment from 'moment';
+import Rx from 'rxjs/Rx';
 
 import { models as Models } from '../server';
 import TraktController from './trakt.controller';
@@ -29,15 +30,15 @@ export default class BotController {
    * @param senderId Id of the sender
    * @returns {Promise}
    */
-  static processIncoming(message: FbMessage, senderId: string): Promise<any> {
+  static processIncoming(message: FbMessage, senderId: string): rxjs$Observable<any> {
     const text = (message.text || '').trim();
-    if (message.is_echo || !text) return Promise.resolve([]);
+    if (message.is_echo || !text) return Rx.Observable.empty();
 
     if (message.quick_reply) {
       const quickReply = JSON.parse(message.quick_reply.payload);
-      return BotController.onQuickReply(senderId, quickReply.action);
+      return Rx.Observable.fromPromise(BotController.onQuickReply(senderId, quickReply.action));
     }
-    return BotController.onMessage(senderId, text);
+    return Rx.Observable.fromPromise(BotController.onMessage(senderId, text));
   }
 
   /**
@@ -46,13 +47,13 @@ export default class BotController {
    * @param senderId Id of the sender
    * @returns {Promise}
    */
-  static processPostBack(postback: FbPostBack, senderId: string): Promise<any> {
+  static processPostBack(postback: FbPostBack, senderId: string): rxjs$Observable<any> {
     const payload = JSON.parse(postback.payload);
     if (!payload.action) {
       const error = new CustomError('Action not found in PostBack payload', { payload });
-      return Promise.reject(error);
+      return Rx.Observable.throw(error);
     }
-    return BotController.onPostBack(senderId, payload.action, payload.series);
+    return Rx.Observable.fromPromise(BotController.onPostBack(senderId, payload.action, payload.series));
   }
 
   /**
@@ -61,13 +62,13 @@ export default class BotController {
    * @param senderId Id of the sender
    * @returns {Promise}
    */
-  static processQuickReply(quickReply: FbQuickReply, senderId: string): Promise<any> {
+  static processQuickReply(quickReply: FbQuickReply, senderId: string): rxjs$Observable<any> {
     const payload = JSON.parse(quickReply.payload);
     if (!payload.action) {
       const error = new CustomError('Action not found in QuickReply payload', { payload });
-      return Promise.reject(error);
+      return Rx.Observable.throw(error);
     }
-    return BotController.onQuickReply(senderId, payload.action);
+    return Rx.Observable.fromPromise(BotController.onQuickReply(senderId, payload.action));
   }
 
   /**
