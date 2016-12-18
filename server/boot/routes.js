@@ -1,6 +1,6 @@
 // @flow
 
-import Rx from 'rxjs';
+import Rx from 'rxjs/Rx';
 
 import BotController from '../controllers/bot.controller';
 import * as Logger from '../utils/logger';
@@ -47,7 +47,7 @@ export default function (server: any) {
     const messagingArr = entry[0].messaging;
     messagingArr.forEach((messagingObj) => {
       const { message, postback, sender, quick_reply: quickReply } = messagingObj;
-      let _observable;
+      let _observable: Rx.Observable<any>;
       if (postback) {
         _observable = BotController.processPostBack(postback, sender.id);
       } else if (message) {
@@ -58,7 +58,7 @@ export default function (server: any) {
         _observable = Rx.Observable.throw(new CustomError('Message & PostBack both are null', { messagingObj }));
       }
       _observable
-        .take(2)
+        .take(3)
         .switchMap(msgObj => MessengerApi.sendMessage(sender.id, msgObj))
         .catch((err) => {
           // whenever there's an error log it and let the user know

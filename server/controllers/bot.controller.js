@@ -28,9 +28,9 @@ export default class BotController {
    * Parses the facebook message object and dispatches the control flow to wherever necessary
    * @param message Message object sent by facebook
    * @param senderId Id of the sender
-   * @returns {Promise}
+   * @returns {Rx.Observable}
    */
-  static processIncoming(message: FbMessage, senderId: string): rxjs$Observable<any> {
+  static processIncoming(message: FbMessage, senderId: string): Rx.Observable<any> {
     const text = (message.text || '').trim();
     if (message.is_echo || !text) return Rx.Observable.empty();
 
@@ -38,31 +38,31 @@ export default class BotController {
       const quickReply = JSON.parse(message.quick_reply.payload);
       return Rx.Observable.fromPromise(BotController.onQuickReply(senderId, quickReply.action));
     }
-    return Rx.Observable.fromPromise(BotController.onMessage(senderId, text));
+    return BotController.onMessage(senderId, text);
   }
 
   /**
    * Parses the facebook postback object and dispatches the control flow
    * @param postback Postback object sent by facebook
    * @param senderId Id of the sender
-   * @returns {Promise}
+   * @returns {Rx.Observable}
    */
-  static processPostBack(postback: FbPostBack, senderId: string): rxjs$Observable<any> {
+  static processPostBack(postback: FbPostBack, senderId: string): Rx.Observable<any> {
     const payload = JSON.parse(postback.payload);
     if (!payload.action) {
       const error = new CustomError('Action not found in PostBack payload', { payload });
       return Rx.Observable.throw(error);
     }
-    return Rx.Observable.fromPromise(BotController.onPostBack(senderId, payload.action, payload.series));
+    return BotController.onPostBack(senderId, payload.action, payload.series);
   }
 
   /**
    * Parses the facebook QuickReply object and dispatches the control flow
    * @param quickReply QuickReply object sent by facebook
    * @param senderId Id of the sender
-   * @returns {Promise}
+   * @returns {Rx.Observable}
    */
-  static processQuickReply(quickReply: FbQuickReply, senderId: string): rxjs$Observable<any> {
+  static processQuickReply(quickReply: FbQuickReply, senderId: string): Rx.Observable<any> {
     const payload = JSON.parse(quickReply.payload);
     if (!payload.action) {
       const error = new CustomError('Action not found in QuickReply payload', { payload });
@@ -75,25 +75,24 @@ export default class BotController {
    * Called when a user msgs something to the bot
    * @param senderId The social id of the sender
    * @param text The message that the user sent
-   * @returns {Promise}
+   * @returns {Rx.Observable}
    */
-  static onMessage(senderId: string, text: string): Promise<Carousel> {
+  static onMessage(senderId: string, text: string): Rx.Observable<any> {
     const noSeriesMsg = 'no_series_found';
-    return TraktController.search(text)
-      .filter(series => series.running)
-      .then((seriesList) => {
+    return Rx.Observable.fromPromise(TraktController.search(text))
+      .map(seriesList => seriesList.filter(series => series.running))
+      .switchMap((seriesList: Array<Series>) => {
         if (seriesList.length === 0) {
-          return Promise.reject(noSeriesMsg);
+          return Rx.Observable.throw(new Error(noSeriesMsg));
         }
-        return seriesList;
+        return Rx.Observable.of(seriesList);
       })
-      .then(seriesList => BotController.showSeriesAccToSubscription(seriesList, senderId))
-      .catch((err) => {
-        if (err === noSeriesMsg) {
-          return { text: 'Sorry, no Series found with that name :/' };
+      .switchMap(seriesList => BotController.showSeriesAccToSubscription(seriesList, senderId))
+      .catch((err: Error) => {
+        if (err.message === noSeriesMsg) {
+          return Rx.Observable.of({ text: 'Sorry, no Series found with that name :/' });
         }
-        Logger.error(err);
-        return { text: 'Sorry something went wrong :/' };
+        return Rx.Observable.throw(err);
       });
   }
 
@@ -104,10 +103,10 @@ export default class BotController {
    * subscribed to  BBT, then it will show UN-SUBSCRIBE under BBT & SUBSCRIBE under Suits
    * @param seriesList The list of series to show
    * @param senderId The social id of the sender
-   * @returns {Promise}
+   * @returns {Rx.Observable}
    */
-  static showSeriesAccToSubscription(seriesList: Array<Series>, senderId: string): Promise<Carousel> {
-    return Promise.props({
+  static showSeriesAccToSubscription(seriesList: Array<Series>, senderId: string): Rx.Observable<Carousel> {
+    const _promise = Promise.props({
       seriesList,
       subscribedList: Models.User.myShows(senderId),
     }).then((result: { seriesList: Array<Series>, subscribedList: Array<Series> }) => {
@@ -125,6 +124,7 @@ export default class BotController {
       });
       return MsgController.carousel(seriesList, actionList, buttonTextList);
     });
+    return Rx.Observable.fromPromise(_promise);
   }
 
   /**
@@ -132,9 +132,9 @@ export default class BotController {
    * @param senderId Social Id of the user (in Fb case, the senderId)
    * @param action Action associated with the button
    * @param series The series on which the action was performed
-   * @returns {Promise}
+   * @returns {Rx.Observable}
    */
-  static onPostBack(senderId: string, action: string, series: Series): Promise<any> {
+  static onPostBack(senderId: string, action: string, series: Series): Rx.Observable<any> {
     switch (action) {
       case Actions.GET_STARTED:
         return BotController.getStarted(senderId);
@@ -158,7 +158,7 @@ export default class BotController {
         return BotController.help();
 
       default:
-        return Promise.reject(new CustomError('unknown action', { action }));
+        return Rx.Observable.throw(new CustomError('unknown action', { action }));
     }
   }
 
@@ -166,9 +166,9 @@ export default class BotController {
    * Called when the user clicks a quick reply
    * @param senderId Social Id of the user (in Fb cas, the senderId)
    * @param action Action associated with the button
-   * @returns {Promise}
+   * @returns {Rx.Observable}
    */
-  static onQuickReply(senderId: string, action: string): Promise<{ text: string }> {
+  static onQuickReply(senderId: string, action: string): Rx.Observable<{ text: string }> {
     switch (action) {
       case Actions.I_WILL_SEARCH:
         return BotController.searchMessage();
@@ -183,11 +183,11 @@ export default class BotController {
   /**
    * Gets called when the 'Get Started' button is clicked
    * @param senderId Social Id of the user (in Fb case, the senderId)
-   * @returns {Promise.<{text: string, quick_replies: Array}>}
+   * @returns {Rx.Observable.<{text: string, quick_replies: Array}>}
    */
-  static getStarted(senderId: string): Promise<{ text: string, quick_replies: Array<any> }> {
-    return ProfileController.get(senderId)
-      .then(profile => ({
+z  static getStarted(senderId: string): Rx.Observable<{ text: string, quick_replies: Array<any> }> {
+    return Rx.Observable.fromPromise(ProfileController.get(senderId))
+      .map(profile => ({
         text: `Hey ${profile.first_name}!\n` +
         'Would you like to see some trending series\' you can subscribe to?',
         quick_replies: BotConfig.quickReplies.getStarted,
@@ -208,9 +208,10 @@ export default class BotController {
    * @param senderId Social Id of the user (in Fb case, the senderId)
    * @param series The series to subscribe
    */
-  static subscribe(senderId: string, series: Series): Promise<{ text: string }> {
-    return Models.User.addSubscription(senderId, series)
-      .then(() => ({ text: `Subscribed to ${series.name}` }));
+  static subscribe(senderId: string, series: Series): Rx.Observable<{ text: string }> {
+    return Rx.Observable.fromPromise(
+      Models.User.addSubscription(senderId, series)
+    ).map(() => ({ text: `Subscribed to ${series.name}` }));
   }
 
   /**
@@ -218,9 +219,10 @@ export default class BotController {
    * @param senderId Social Id of the user (in Fb case, the senderId)
    * @param series The series to un-subscribe from
    */
-  static unSubscribe(senderId: string, series: Series): Promise<{ text: string }> {
-    return Models.User.removeSubscription(senderId, series)
-      .then(() => ({ text: `Un-subscribed from ${series.name}` }));
+  static unSubscribe(senderId: string, series: Series): Rx.Observable<{ text: string }> {
+    return Rx.Observable.fromPromise(
+      Models.User.removeSubscription(senderId, series)
+    ).map(() => ({ text: `Un-subscribed from ${series.name}` }));
   }
 
   /**
@@ -228,8 +230,8 @@ export default class BotController {
    * @param senderId Social Id of the user requesting
    * @returns {Promise}
    */
-  static myShows(senderId: string): Promise<Carousel | { text: string }> {
-    return Models.User.myShows(senderId)
+  static myShows(senderId: string): Rx.Observable<any> {
+    const _promise = Models.User.myShows(senderId)
       .then((seriesList) => {
         if (seriesList.length === 0) {
           return { text: 'Sorry, you haven\'t subscribed to any shows yet' };
@@ -238,39 +240,46 @@ export default class BotController {
         const buttonTextList = new Array(seriesList.length).fill(ButtonTexts.UN_SUBSCRIBE);
         return MsgController.carousel(seriesList, actionList, buttonTextList);
       });
+    return Rx.Observable.fromPromise(_promise);
   }
 
   /**
    * Returns all the Trending shows
    * @param senderId Social Id of the user requesting
    */
-  static showTrending(senderId: string): Promise<Carousel> {
-    return Models.Trending.get()
-      .then(seriesList => BotController.showSeriesAccToSubscription(seriesList, senderId));
+  static showTrending(senderId: string): Rx.Observable<Carousel> {
+    return Rx.Observable.fromPromise(Models.Trending.get())
+      .switchMap(seriesList => BotController.showSeriesAccToSubscription(seriesList, senderId));
   }
 
-  static nextEpisodeDate(series: Series): Promise<{ text: string }> {
+  static nextEpisodeDate(series: Series): Rx.Observable<{ text: string }> {
     // eslint-disable-next-line max-len
     const unknownEpMsg = { text: `Sorry, I don't know the exact release date of ${series.name}'s next episode.` };
-    return TraktController.getNextEpisode(series.imdbId)
-      .then((nextEp) => {
+    const nextEpPromise = TraktController.getNextEpisode(series.imdbId);
+    return Rx.Observable.fromPromise(nextEpPromise)
+      .map((nextEp) => {
         if (!nextEp) return unknownEpMsg;
         const epNumber = (`00${nextEp.number}`).slice(-2);
         const seriesNumber = (`00${nextEp.season}`).slice(-2);
         const timeDiff = moment(nextEp.first_aired).fromNow();
-        return {
+        return ({
           text: `S${seriesNumber}E${epNumber} of ${series.name} goes live ${timeDiff}`,
-        };
+        });
       })
       .catch(() => {
         Logger.error(new Error(`unknown next episode: ${series.imdbId}`));
-        return unknownEpMsg;
+        return Rx.Observable.of(unknownEpMsg);
       });
   }
 
-  static help() {
-    return Promise.resolve({
-      text: 'Just send me the name for the series you are looking for, or select "Show Trending" from the menu.',
+  static help(): Rx.Observable<{ text: string }> {
+    return Rx.Observable.create((observer) => {
+      observer.next({ text: 'Just send me the name for the series you are looking for' });
+      return Promise.delay(1000)
+        .then(() => observer.next({ text: 'or' }))
+        .delay(500)
+        .then(() => observer.next({ text: 'select "Show Trending" from the menu' }))
+        .finally(() => observer.complete());
     });
   }
 

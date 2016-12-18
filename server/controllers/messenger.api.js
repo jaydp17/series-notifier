@@ -11,7 +11,7 @@ const fireRequest = options => Rx.Observable.fromPromise(request(options));
 
 class MessengerApi {
 
-  static sendMessage(senderId: string, msgObj: Object): rxjs$Observable<any> {
+  static sendMessage(senderId: string, msgObj: Object): Rx.Observable<any> {
     const options = {
       method: 'POST',
       url: `${FbConstants.GRAPH_API_URL}/me/messages`,
@@ -28,7 +28,7 @@ class MessengerApi {
     return fireRequest(options);
   }
 
-  static sendText(text: string, senderId: string): rxjs$Observable<any> {
+  static sendText(text: string, senderId: string): Rx.Observable<any> {
     const options = {
       method: 'POST',
       url: `${FbConstants.GRAPH_API_URL}/me/messages`,
