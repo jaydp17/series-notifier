@@ -12,7 +12,7 @@ COPY package.json yarn.lock /src/
 
 ADD .yarn-cache.tgz /
 
-RUN yarn
+RUN NODE_ENV=development yarn
 
 COPY . /src
 
