@@ -2,9 +2,7 @@
 
 import request from 'request-promise';
 import BotConfig from '../bot-config';
-import app from '../server';
-
-const FbConstants = app.get('fb');
+import * as FbConstants from '../fb-constants';
 
 export default class GetStartedButtonController {
 

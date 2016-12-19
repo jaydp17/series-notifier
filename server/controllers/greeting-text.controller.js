@@ -1,9 +1,7 @@
 // @flow
 
 import request from 'request-promise';
-import app from '../server';
-
-const FbConstants = app.get('fb');
+import * as FbConstants from '../fb-constants';
 
 export default class GreetingTextController {
   static set(text: string) {

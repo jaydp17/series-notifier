@@ -7,8 +7,7 @@ import * as Logger from '../utils/logger';
 import MessengerApi from '../controllers/messenger.api';
 import CustomError from '../utils/custom-error';
 import app from '../server';
-
-const FbConstants = app.get('fb');
+import * as FbConstants from '../fb-constants';
 
 export default function (server: any) {
   const router = server.loopback.Router(); // eslint-disable-line new-cap
@@ -17,7 +16,7 @@ export default function (server: any) {
     const params = {
       botName: app.get('botName'),
       fqdn: app.get('fqdn'),
-      fbUsername: FbConstants.username,
+      fbUsername: FbConstants.USERNAME,
       hostUrl: `${app.get('protocol')}://${app.get('fqdn')}:${app.get('port')}`,
     };
     res.render('privacy', params);

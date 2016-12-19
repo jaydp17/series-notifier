@@ -3,9 +3,7 @@
 import Rx from 'rxjs';
 import request from 'request-promise';
 
-import app from '../server';
-
-const FbConstants = app.get('fb');
+import * as FbConstants from '../fb-constants';
 
 const fireRequest = options => Rx.Observable.fromPromise(request(options));
 

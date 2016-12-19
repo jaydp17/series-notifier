@@ -1,0 +1,20 @@
+{
+  "Actions": {
+    "GET_STARTED": "get-started",
+    "SHOW_TRENDING": "show-trending",
+    "I_WILL_SEARCH": "i-will-search",
+    "SUBSCRIBE": "subscribe",
+    "UN_SUBSCRIBE": "un-subscribe",
+    "MY_SHOWS": "my-shows",
+    "NEXT_EP_DATE": "next-ep-date",
+    "HELP": "help"
+  },
+  "ButtonTexts": {
+    "SHOW_TRENDING": "Show Trending",
+    "SUBSCRIBE": "Notify Me",
+    "UN_SUBSCRIBE": "Un-Subscribe",
+    "MY_SHOWS": "My Shows",
+    "NEXT_EP_DATE": "Next episode date",
+    "HELP": "Help"
+  }
+}

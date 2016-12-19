@@ -7,9 +7,7 @@ import * as Logger from '../utils/logger';
 
 import type { Series } from '../models/series';
 
-const ApiKeys = require('../constants.json').ApiKeys;
-
-const tvdb = new TVDB(ApiKeys.TVDB);
+const tvdb = new TVDB(process.env.TVDB_API_KEY);
 
 /**
  * A class that interacts with TvDb to fetch information

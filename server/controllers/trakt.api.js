@@ -3,12 +3,10 @@
 import Promise from 'bluebird';
 import request from 'request-promise';
 
-const apiKey = require('../constants.json').ApiKeys.TRAKT;
-
 const BASE_URL = 'https://api.trakt.tv';
 const HEADERS = {
   'trakt-api-version': '2',
-  'trakt-api-key': apiKey,
+  'trakt-api-key': process.env.TRAKT_API_KEY,
 };
 const fireRequest = options => request(options).promise();
 

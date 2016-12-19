@@ -15,6 +15,11 @@ export default function validate() {
     throw new Error('FB_VERIFY_TOKEN not found in env vars');
   }
 
+  const botUsername = process.env.FB_USERNAME;
+  if (!botUsername) {
+    throw new Error('FB_USERNAME not found in env vars');
+  }
+
   const tvdbApiKey = process.env.TVDB_API_KEY;
   if (!tvdbApiKey) {
     throw new Error('TVDB_API_KEY not found in env vars');
