@@ -16,13 +16,3 @@ services:
       - server
     environment:
       CRON: 1
-
-  nginx:
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile-nginx
-    depends_on:
-      - server
-    ports:
-      - 80:80
-      - 443:443
