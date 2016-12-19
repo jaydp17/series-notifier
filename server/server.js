@@ -7,6 +7,11 @@ import boot from 'loopback-boot';
 import loopbackConsole from 'loopback-console';
 import path from 'path';
 
+import environmentValidate from './utils/verify-environment';
+
+// validates if all the required environment variables are passed while running
+environmentValidate();
+
 const app = module.exports = loopback();
 
 // Server side rendering
