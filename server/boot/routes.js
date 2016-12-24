@@ -45,7 +45,7 @@ export default function (server: any) {
     const { entry } = req.body;
     const messagingArr = entry[0].messaging;
     messagingArr.forEach((messagingObj) => {
-      const { message, postback, sender, quick_reply: quickReply } = messagingObj;
+      const { message, postback, sender, quick_reply: quickReply, delivery, read } = messagingObj;
       let _observable: Rx.Observable<any>;
       if (postback) {
         _observable = BotController.processPostBack(postback, sender.id);
@@ -53,10 +53,12 @@ export default function (server: any) {
         _observable = BotController.processIncoming(message, sender.id);
       } else if (quickReply) {
         _observable = BotController.processQuickReply(quickReply, sender.id);
+      } else if (delivery || read) {
+        return undefined;
       } else {
         _observable = Rx.Observable.throw(new CustomError('Message & PostBack both are null', { messagingObj }));
       }
-      _observable
+      return _observable
         .take(3)
         .switchMap(msgObj => MessengerApi.sendMessage(sender.id, msgObj))
         .catch((err) => {
