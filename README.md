@@ -7,5 +7,5 @@ A Messenger bot that notifies you when the next episode of your favorite TV Seri
 
 Link: [m.me/snbot](https://m.me/snbot)
 
-# Messenger Code
-<img src="https://s24.postimg.org/dsph4anb9/1482596338995.jpg" width="300px"/>
+# Demo
+![Demo GIF](http://i.giphy.com/l4JzgRsCwfKtZbobu.gif)
