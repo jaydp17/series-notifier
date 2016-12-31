@@ -59,7 +59,7 @@ export default function (server: any) {
         _observable = Rx.Observable.throw(new CustomError('Message & PostBack both are null', { messagingObj }));
       }
       return _observable
-        .take(3)
+        .timeout(30000)
         .switchMap(msgObj => MessengerApi.sendMessage(sender.id, msgObj))
         .catch((err) => {
           // whenever there's an error log it and let the user know
