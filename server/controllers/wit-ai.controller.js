@@ -9,7 +9,7 @@ import { Intents, Entities } from '../wit-config';
 
 export type WitParsed = {
   intent: string,
-  series: ?string,
+  series?: string,
 };
 
 const witClient = new Wit({ accessToken: witAIToken });
@@ -52,7 +52,7 @@ export default class WitAIController {
     if (intent && intent.length === 0) {
       return undefined;
     }
-    const result = {
+    const result: WitParsed = {
       intent: intent[0].value,
     };
 
