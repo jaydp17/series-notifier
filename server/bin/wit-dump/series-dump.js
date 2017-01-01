@@ -139,4 +139,248 @@ export default [
     value: 'Shameless (US)',
     expressions: [ 'Shameless (US)', 'shameless' ],
   },
+  {
+    value: 'The Blacklist',
+    expressions: [ 'The Blacklist', 'blacklist' ],
+  },
+  {
+    value: 'The Dr. Oz Show',
+    expressions: [ 'The Dr. Oz Show' ],
+  },
+  {
+    value: 'How I Met Your Mother',
+    expressions: [ 'How I Met Your Mother' ],
+  },
+  {
+    value: 'Quantico',
+    expressions: [ 'Quantico' ],
+  },
+  {
+    value: 'The Office',
+    expressions: [ 'The Office', 'office' ],
+  },
+  {
+    value: 'Murder, She Wrote',
+    expressions: [ 'Murder, She Wrote' ],
+  },
+  {
+    value: 'Naruto Shippuden',
+    expressions: [ 'Naruto Shippuden' ],
+  },
+  {
+    value: 'Entertainment Tonight',
+    expressions: [ 'Entertainment Tonight' ],
+  },
+  {
+    value: 'Cybill',
+    expressions: [ 'Cybill' ],
+  },
+  {
+    value: 'Code Red',
+    expressions: [ 'Code Red' ],
+  },
+  {
+    value: 'South Park',
+    expressions: [ 'South Park' ],
+  },
+  {
+    value: 'Code Monkeys',
+    expressions: [ 'Code Monkeys' ],
+  },
+  {
+    value: 'The Knock',
+    expressions: [ 'The Knock' ],
+  },
+  {
+    value: 'Lucifer',
+    expressions: [ 'Lucifer' ],
+  },
+  {
+    value: 'Gotham',
+    expressions: [ 'Gotham' ],
+  },
+  {
+    value: 'The Rachael Ray Show',
+    expressions: [ 'The Rachael Ray Show', 'Rachael Ray Show', 'Ray Show', 'Rachael Show' ],
+  },
+  {
+    value: 'Days of our Lives',
+    expressions: [ 'Days of our Lives' ],
+  },
+  {
+    value: 'Downton Abbey',
+    expressions: [ 'Downton Abbey' ],
+  },
+  {
+    value: 'Night Court',
+    expressions: [ 'Night Court' ],
+  },
+  {
+    value: 'Pretty Little Liars',
+    expressions: [ 'Pretty Little Liars' ],
+  },
+  {
+    value: 'The Mindy Project',
+    expressions: [ 'The Mindy Project', 'Mindy Project' ],
+  },
+  {
+    value: 'Judge Judy',
+    expressions: [ 'Judge Judy' ],
+  },
+  {
+    value: 'Scream Queens',
+    expressions: [ 'Scream Queens' ],
+  },
+  {
+    value: 'Quantico',
+    expressions: [ 'Quantico' ],
+  },
+  {
+    value: 'Prison Break',
+    expressions: [ 'Prison Break' ],
+  },
+  {
+    value: 'Judge Mathis',
+    expressions: [ 'Judge Mathis' ],
+  },
+  {
+    value: 'Steve Harvey',
+    expressions: [ 'Steve Harvey' ],
+  },
+  {
+    value: 'The Honeymooners',
+    expressions: [ 'The Honeymooners', 'Honeymooners' ],
+  },
+  {
+    value: 'Buffy the Vampire Slayer',
+    expressions: [ 'Buffy the Vampire Slayer' ],
+  },
+  {
+    value: 'Black Mirror',
+    expressions: [ 'Black Mirror' ],
+  },
+  {
+    value: 'Bones',
+    expressions: [ 'Bones' ],
+  },
+  {
+    value: 'Castle',
+    expressions: [ 'Castle' ],
+  },
+  {
+    value: 'American Dad!',
+    expressions: [ 'American Dad!' ],
+  },
+  {
+    value: 'Kung Fu',
+    expressions: [ 'Kung Fu' ],
+  },
+  {
+    value: 'Elementary',
+    expressions: [ 'Elementary' ],
+  },
+  {
+    value: 'Saturday Night Live',
+    expressions: [ 'Saturday Night Live' ],
+  },
+  {
+    value: 'Friends',
+    expressions: [ 'Friends' ],
+  },
+  {
+    value: 'The 100',
+    expressions: [ 'The 100', '100' ],
+  },
+  {
+    value: 'Teen Wolf',
+    expressions: [ 'Teen Wolf' ],
+  },
+  {
+    value: 'Today Show',
+    expressions: [ 'Today Show' ],
+  },
+  {
+    value: 'Timeless',
+    expressions: [ 'Timeless' ],
+  },
+  {
+    value: 'ER',
+    expressions: [ 'ER' ],
+  },
+  {
+    value: 'The Chew',
+    expressions: [ 'The Chew', 'Chew' ],
+  },
+  {
+    value: 'The Good Wife',
+    expressions: [ 'The Good Wife', 'Good Wife' ],
+  },
+  {
+    value: 'The Exorcist',
+    expressions: [ 'The Exorcist', 'Exorcist' ],
+  },
+  {
+    value: 'Coronation Street',
+    expressions: [ 'Coronation Street' ],
+  },
+  {
+    value: 'Major Crimes',
+    expressions: [ 'Major Crimes' ],
+  },
+  {
+    value: 'Crossing Lines',
+    expressions: [ 'Crossing Lines' ],
+  },
+  {
+    value: 'MythBusters',
+    expressions: [ 'MythBusters' ],
+  },
+  {
+    value: 'Heroes',
+    expressions: [ 'Heroes' ],
+  },
+  {
+    value: 'American Horror Story',
+    expressions: [ 'American Horror Story' ],
+  },
+  {
+    value: 'Sesame Street',
+    expressions: [ 'Sesame Street' ],
+  },
+  {
+    value: 'LIVE with Kelly',
+    expressions: [ 'LIVE with Kelly' ],
+  },
+  {
+    value: 'Law & Order',
+    expressions: [ 'Law & Order' ],
+  },
+  {
+    value: 'Family Guy',
+    expressions: [ 'Family Guy' ],
+  },
+  {
+    value: 'Sherlock',
+    expressions: [ 'Sherlock' ],
+  },
+  {
+    value: 'The Mentalist',
+    expressions: [ 'The Mentalist', 'Mentalist' ],
+  },
+  {
+    value: 'The Affair',
+    expressions: [ 'The Affair' ],
+  },
+  {
+    value: 'The Librarians (US)',
+    expressions: [ 'The Librarians (US)', 'The Librarians', 'Librarians' ],
+  },
+  {
+    value: 'Conviction (2016)',
+    expressions: [ 'Conviction (2016)', 'Conviction' ],
+  },
+  {
+    value: 'The Real Housewives of Atlanta',
+    expressions: [ 'The Real Housewives of Atlanta', 'Real Housewives of Atlanta', 'Housewives of Atlanta' ],
+  },
 ];
