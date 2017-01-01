@@ -9,3 +9,8 @@ Link: [m.me/snbot](https://m.me/snbot)
 
 # Demo
 ![Demo GIF](http://i.giphy.com/l4JzgRsCwfKtZbobu.gif)
+
+# TODO
+- [ ] Add NLP
+- [ ] Add GIFs in responses
+- [ ] Add Tests
