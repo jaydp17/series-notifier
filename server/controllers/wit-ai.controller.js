@@ -5,6 +5,7 @@ import { Wit } from 'node-wit';
 import fireRequest from '../utils/fire-request';
 import { witAIToken } from '../utils/environment';
 import CustomError from '../utils/custom-error';
+import { Intents, Entities } from '../wit-config';
 
 export type WitParsed = {
   intent: string,
@@ -12,15 +13,8 @@ export type WitParsed = {
 };
 
 const witClient = new Wit({ accessToken: witAIToken });
-const Entities = {
-  series: 'series',
-};
 
-const Intents = {
-  nextEpisode: 'next-episode',
-};
-
-export default class WitAI {
+export default class WitAIController {
 
   static putInFeedback(name: string | Array<string>) {
     let nameArr: Array<string>;

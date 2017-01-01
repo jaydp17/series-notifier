@@ -4,18 +4,13 @@ import Promise from 'bluebird';
 import request from 'request-promise';
 import { nextEpisode, searchSeries } from '../utils/form-sentences';
 import seriesDump from '../bin/wit-dump/series-dump';
-
+import { Intents } from '../wit-config';
 
 const token: string = process.env.WITAI_TOKEN || '';
 if (!token) {
   console.error('Pass WITAI_TOKEN as an env variable'); // eslint-disable-line no-console
   process.exit(1);
 }
-
-const Intents = {
-  nextEpisode: 'next-episode',
-  search: 'search',
-};
 
 function flattenArray(finalArray, eachArray) {
   return finalArray.concat(eachArray);
