@@ -55,14 +55,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@gitlab.com/jaydp17/series-notifier-fb-bot.git"
+    "url": "git+https://github.com/jaydp17/series-notifier.git"
   },
   "author": "Jaydeep Solanki <jaydp17@gmail.com> (https://jaydp.com)",
   "license": "UNLICENSED",
-  "private": true,
   "bugs": {
-    "url": "https://gitlab.com/jaydp17/series-notifier-fb-bot/issues"
+    "url": "https://github.com/jaydp17/series-notifier/issues"
   },
-  "homepage": "https://gitlab.com/jaydp17/series-notifier-fb-bot#README",
+  "homepage": "https://github.com/jaydp17/series-notifier#readme",
   "keywords": []
 }
