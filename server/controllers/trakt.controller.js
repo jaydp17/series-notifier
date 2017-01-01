@@ -7,6 +7,7 @@ import _array from 'lodash/array';
 import TraktApi from './trakt.api';
 import TvDbController from './tvdb.controller';
 import CustomError from '../utils/custom-error';
+import WitAI from './wit-ai.controller';
 import type { Series, TraktEpisode } from '../models/series';
 
 export default class TraktController {
@@ -23,7 +24,11 @@ export default class TraktController {
       .filter(id => id) // remove null/undefined ids
       .then(ids => _array.uniq(ids)) // make them unique
       .then(TvDbController.getSeriesByIds)
-      .then(TvDbController._sortShowsByRunning);
+      .then(TvDbController._sortShowsByRunning)
+      .tap((seriesList) => {
+        const seriesNames = seriesList.map(s => s.name);
+        WitAI.putInFeedback(seriesNames); // intentionally not returned promise, to return response to user faster
+      });
   }
 
   /**
